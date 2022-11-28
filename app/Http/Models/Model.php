@@ -262,14 +262,13 @@ class Model
    */
   public function get(): array
   {
-    $this->db->query($this->query, $this->binds);
+    $this->db->query($this->query);
     if(!empty($this->binds)) {
       foreach ($this->binds as $key => $value) {
         $this->db->bind($key, $value);
       }
-    } else {
-      return $this->db->resultSet();
     }
+    return $this->db->resultSet();
   }
 
   /**
