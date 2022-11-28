@@ -55,7 +55,6 @@ class Model
     return $this->db->resultSet();
   }
 
-
   /**
    * Find a record by primary key
    * @param int $id
@@ -201,7 +200,6 @@ class Model
     return $this;
   }
 
-
   /**
    * orHaving with prepared statement
    * @param string $having
@@ -215,7 +213,6 @@ class Model
     return $this;
   }
 
-
   /**
    * Order by column name
    * @param string $orderBy
@@ -227,7 +224,6 @@ class Model
     $this->query .= ' ORDER BY ' . $orderBy . ' ' . $order;
     return $this;
   }
-
 
   /**
    * Set the group by clause for the query.
@@ -312,7 +308,6 @@ class Model
     return $this->db->execute();
   }
   
-
   /**
    * Delete a record from the database based on the primary key
    * @param  int $id
@@ -340,9 +335,7 @@ class Model
     return $this->db->resultSet();
   }
 
-
   // This function sets the database table name. The name is determined by the getTableName() function.
-
   protected function setTable()
   {
     $this->databaseTable = $this->getTableName();
