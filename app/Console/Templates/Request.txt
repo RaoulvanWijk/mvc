@@ -1,0 +1,19 @@
+<?php
+namespace App\Http\Requests;
+
+class {{ name }} extends Request
+{
+  public function authorize()
+  {
+    // authorize needs to return true
+    // otherwise the request will be denied
+    return false;
+  }
+
+  public function rules()
+  {
+    return [
+      // add your rules here
+    ];
+  }
+}

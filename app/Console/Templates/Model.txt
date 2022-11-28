@@ -1,0 +1,13 @@
+<?php
+namespace App\Http\Models;
+
+class {{ name }} extends Model
+{
+  protected array $fillable = [];
+
+  protected array $hidden = [];
+
+
+  // if you want to change the default database connection name
+  // call the parent constructor with the database name
+}

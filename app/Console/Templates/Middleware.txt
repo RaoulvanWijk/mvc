@@ -1,0 +1,13 @@
+<?php
+namespace App\Http\Middleware;
+
+use Closure;
+
+class {{ name }} implements Middleware
+{
+  public function handle($request, Closure $next)
+  {
+    // do something
+    return $next($request);
+  }
+}
