@@ -10,7 +10,6 @@ abstract class Controller
    */
   protected string $nextUrl;
 
-
   /**
    * This method will be used to load a view
    */
