@@ -3,21 +3,28 @@
 
 
 ## How to install
+
+Clone repository
+
 ```git
 git clone https://github.com/RaoulvanWijk/mvc.git
 ```
-after you cloned the repository
 
-you need to run composer install
+Install composer packages
 
-to install all the packages
+```
+composer install
+```
+
 ## Running the framework
 To run the framework you have 2 options:
 Run it from command line
 ```bash
 $ php mvc serve
 ```
-or run it by creating a virtual host
+or run it by creating a virtual host.
+
+*Note that mvc server uses the [PHP server](https://www.php.net/manual/en/features.commandline.webserver.php) under the hood which is **NOT** meant to used as a web server so only use `mvc serve` for development purposes!*
 
 **And make sure you are running your database if you want to use it**
 

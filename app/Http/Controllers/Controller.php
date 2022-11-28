@@ -3,13 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Http\Route;
-class Controller 
+abstract class Controller 
 {
   /**
    * Var used to store the next route
    */
   protected string $nextUrl;
-
 
   /**
    * This method will be used to load a view

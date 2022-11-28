@@ -44,7 +44,6 @@ class HttpKernel
     ];
   }
 
-
   /**
    * This method will be used to handle the route requested by the user
    * @param string $url
@@ -55,8 +54,6 @@ class HttpKernel
   {
     // Remove query string variables from URL (if any).
     $url = parse_url($url, PHP_URL_PATH);
-
-
 
     // check if $mehtod is a valid method
     if (!in_array($method, ['GET', 'POST', 'PUT', 'DELETE'])) {
@@ -71,7 +68,6 @@ class HttpKernel
     // check if the route exists with params
     return self::verifyRouteWithParams($url, $method);
   }
-
 
   /**
    * This method will be used to verify if the route exists with params
@@ -94,7 +90,6 @@ class HttpKernel
     }
     // route not found
     throw new \Exception("Route not found: $url");
-    die();
   }
 
   /**
@@ -114,8 +109,6 @@ class HttpKernel
     return "";
   }
 
-
-  
   public function middleware(string $name, $callable)
   {
     if(isset($this->routeMiddleware[$name])) {
@@ -123,6 +116,4 @@ class HttpKernel
       $t->handle("test", $callable);
     }
   }
-
-
 }

@@ -2,7 +2,6 @@
 
 namespace App\Http\Requests;
 
-
 class Request 
 {
   public function __construct(array $data)
@@ -33,7 +32,6 @@ class Request
         throw new \Exception('CSRF token mismatch');
       }
     }
-
 
     // Validate the data
     // Specify by the rules
