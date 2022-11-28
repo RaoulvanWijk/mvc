@@ -31,7 +31,7 @@ class Application
   {
     $request = self::$httpKernel->handleRoute($_SERVER['REQUEST_URI'], self::getRequestMethod());
     $params = $request[1];
-    if(gettype($request) === 'array') {
+    if(is_array($request)) {
       $this->currentRequestClass = new $request[0][0]();
       $this->currentMethod = $request[0][1];
       self::validateRequest();
