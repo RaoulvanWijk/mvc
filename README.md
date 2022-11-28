@@ -17,7 +17,9 @@ Run it from command line
 ```bash
 $ php mvc serve
 ```
-or run it by creating a virtual host
+or run it by creating a virtual host.
+
+*Note that mvc server uses the [PHP server](https://www.php.net/manual/en/features.commandline.webserver.php) under the hood which is **NOT** meant to used as a web server so only use `mvc server` for development purposes!*
 
 **And make sure you are running your database if you want to use it**
 
