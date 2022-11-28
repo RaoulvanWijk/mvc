@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Route;
-class Controller 
+abstract class Controller 
 {
   /**
    * Var used to store the next route
