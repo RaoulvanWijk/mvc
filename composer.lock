@@ -133,7 +133,6 @@
                     "Resources/functions/dump.php"
                 ],
                 "psr-4": {
-                    "App\\": "app/",
                     "Symfony\\Component\\VarDumper\\": ""
                 },
                 "exclude-from-classmap": [

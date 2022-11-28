@@ -3,7 +3,7 @@
 use App\Console\ArgvInput;
 
 // Require the autloader
-require_once __DIR__ . "/app/autoload.php";
+require_once __DIR__ . "../vendor/autoload.php";
 
 // Get the command line arguments
 $ArgvInput = new ArgvInput($argv);

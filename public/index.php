@@ -5,7 +5,6 @@ session_gc();
 
 // require the autoloader
 require __DIR__.'/../vendor/autoload.php';
-require_once __DIR__.'/../app/autoload.php';
 
 // load the config file
 require_once __DIR__.'/../app/Config/config.php';
