@@ -6,7 +6,11 @@
 ```git
 git clone https://github.com/RaoulvanWijk/mvc.git
 ```
+after you cloned the repository
 
+you need to run composer install
+
+to install all the packages
 ## Running the framework
 To run the framework you have 2 options:
 Run it from command line
