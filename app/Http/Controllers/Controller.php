@@ -15,13 +15,13 @@ abstract class Controller
    */
   protected function view($view, $data = []): void
   {
-    if (file_exists('../app/Views/' . $view . '.php')) 
+    if (file_exists('../resources/views/' . $view . '.php')) 
     {
       foreach ($data as $key => $value) 
       {
         $$key = $value;
       }
-      require_once '../app/Views/' . $view . '.php';
+      require_once '../resources/views/' . $view . '.php';
     } else {
       die("View does not exists.");
     }
