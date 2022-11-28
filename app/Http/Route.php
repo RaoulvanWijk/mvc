@@ -9,7 +9,7 @@ class Route
 
   private static string $prefix = "";
 
-    /**
+  /**
    * This method will be used to register a GET route
    * @param string $path
    * @param Closure|array $callable
@@ -57,8 +57,6 @@ class Route
     Application::$httpKernel->registerRoute('DELETE', self::$prefix . $path, $callable, $name);
   }
 
-
-
   /**
    * This method will set the prefix for the routes in a group function
    * @param string $prefix
@@ -83,11 +81,11 @@ class Route
   }
   
   // create a function that will register middleware to a route
-    public static function middleware(string $name, $callable)
-    {
-      Application::$httpKernel->middleware($name, $callable);
-      return new self;
-    }
+  public static function middleware(string $name, $callable)
+  {
+    Application::$httpKernel->middleware($name, $callable);
+    return new self;
+  }
 
   /**
    * This method will return the route by name
