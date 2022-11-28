@@ -3,14 +3,19 @@
 
 
 ## How to install
+
+Clone repository
+
 ```git
 git clone https://github.com/RaoulvanWijk/mvc.git
 ```
-after you cloned the repository
 
-you need to run composer install
+Install composer packages
 
-to install all the packages
+```
+composer install
+```
+
 ## Running the framework
 To run the framework you have 2 options:
 Run it from command line
