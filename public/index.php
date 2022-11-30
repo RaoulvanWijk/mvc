@@ -6,10 +6,9 @@ session_gc();
 // require the autoloader
 require __DIR__.'/../vendor/autoload.php';
 
-// load the config file
-require_once __DIR__.'/../app/Config/config.php';
-
-
+$dotenv = \Dotenv\Dotenv::createImmutable(dirname(__DIR__));
+$dotenv->safeLoad();
+$dotenv->required(['DB_HOST', 'DB_NAME', 'DB_USER', 'DB_PASS']);
 
 // create the application
 $app = require_once __DIR__. '/../app/app.php';

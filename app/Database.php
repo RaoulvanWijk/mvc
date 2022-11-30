@@ -5,10 +5,10 @@ use \PDO;
 use \PDOException;
     class Database
     {
-        private $dbHost = DB_HOST;
-        private $dbName = DB_NAME;
-        private $dbUser = DB_USER;
-        private $dbPass = DB_PASS;
+        private $dbHost;
+        private $dbName;
+        private $dbUser;
+        private $dbPass;
 
         private $statement;
         private $dbHandler;
@@ -16,6 +16,10 @@ use \PDOException;
 
         public function __construct(string $dbName = null)
         {
+            $this->dbHost = $_ENV["DB_HOST"];
+            $this->dbName = $_ENV["DB_NAME"];
+            $this->dbUser = $_ENV["DB_USER"];
+            $this->dbPass = $_ENV["DB_PASS"];
             if(!is_null($dbName)) {
                 $this->dbName = $dbName;
             }

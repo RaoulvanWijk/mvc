@@ -5,6 +5,10 @@ use App\Console\ArgvInput;
 // Require the autloader
 require_once __DIR__ . "../vendor/autoload.php";
 
+$dotenv = \Dotenv\Dotenv::createImmutable(__DIR__);
+$dotenv->load();
+//$dotenv->required(['DB_HOST', 'DB_NAME', 'DB_USER', 'DB_PASS']);
+
 // Get the command line arguments
 $ArgvInput = new ArgvInput($argv);
 
