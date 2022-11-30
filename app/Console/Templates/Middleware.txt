@@ -2,12 +2,12 @@
 namespace App\Http\Middleware;
 
 use Closure;
+use App\Http\Requests\Request;
 
 class {{ name }} implements Middleware
 {
-  public function handle($request, Closure $next)
+  public function __invoke(Closure $next, Request $request)
   {
-    // do something
     return $next($request);
   }
 }
