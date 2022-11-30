@@ -4,12 +4,15 @@ namespace App\Http\Requests;
 
 class Request 
 {
-  public function __construct(array $data)
+  public function __construct(array $data = null, $useCSRF = true)
   {
+    if(!isset($data)) {
+      $data = array_merge($_POST, $_GET);
+    }
     if($_SERVER["REQUEST_METHOD"] == "GET") {
       $this->validate($data, useCSRF: false);
     } else {
-      $this->validate($data);
+      $this->validate($data, useCSRF: $useCSRF);
     }
   }
 
@@ -21,6 +24,7 @@ class Request
    */
   public function validate(array $data, array $rules = [], bool $useCSRF = true)
   {
+    if(count($rules)) return;
     if(!$this->authorize()) {
       throw new \Exception('Not authorized');
     }
