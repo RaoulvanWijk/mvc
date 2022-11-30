@@ -55,14 +55,30 @@ Route::prefix('/demo')->group(function() {
 ```
 
 
-### Middleware
-As of for now you can only apply middleware to a route by grouping it
+## Middleware
+Middleware is used to validate the uri request
 
+### Creating middleware
+To create middleware execute the following command:
+```bash 
+$ php mvc make:middleware NameOfTheMiddleware
+```
+
+### Adding middleware to a route
+Adding middleware to a single route
+```php
+Route::middleware("nameOfMiddleware")->get('url', [DemoController:class, 'method'], "anotherRouteInGroup")
+```
+
+
+Adding middleware to grouped routes
 ```php
 Route::prefix('/demo')->group(function() {
   Route::get('/url', [DemoController:class, 'method'], "route");
 }, ["middleware" => ["nameOfMiddleware"]])
 ```
+
+
 
 To specify new middleware to go app\Http\HttpKernel
 and add youre middleware class to
@@ -202,10 +218,8 @@ To validate the data you need to use the `rules()` function as following:
 ```
 
 ### using `authorize()`
-
-At the moment there is no middleware so you can use the `authorize()` functions to act as middleware
-
-and authorize needs to return true to validate the request otherwise it will throw an error
+U can use the authorize function to validate if a user is allowed to make the request
+if `authorize()` doesnt return true it will throw en error
 ```php
   public function authorize()
   {
