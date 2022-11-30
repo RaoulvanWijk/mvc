@@ -54,6 +54,26 @@ Route::prefix('/demo')->group(function() {
 });
 ```
 
+
+### Middleware
+As of for now you can only apply middleware to a route by grouping it
+
+```php
+Route::prefix('/demo')->group(function() {
+  Route::get('/url', [DemoController:class, 'method'], "route");
+}, ["middleware" => ["nameOfMiddleware"]])
+```
+
+To specify new middleware to go app\Http\HttpKernel
+and add youre middleware class to
+```php
+  private $routeMiddleware = [
+    "nameOfMiddleware" => \App\Http\Middleware\YoureMiddlewareClass
+  ];
+```
+
+
+
 ## Controllers
 A controller is used to communicate between a view and a model
 
