@@ -108,7 +108,6 @@ class Route
 
   public static function middleware(string|array $middlewareName)
   {
-    dump(debug_backtrace());
     if(is_string($middlewareName)) $middlewareName = [$middlewareName];
     self::$middleware = $middlewareName;
     return new Self();
