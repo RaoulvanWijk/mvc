@@ -60,7 +60,7 @@ class HttpKernel
    * @param string $method
    * @return array|Closure
    */
-  public function handleRoute(string $url, string $method): array|Closure
+  public function handleRoute(string $url, string $method): array|Closure|null
   {
     // Remove query string variables from URL (if any).
     $url = parse_url($url, PHP_URL_PATH);
@@ -81,7 +81,7 @@ class HttpKernel
    * @param string $method
    * @return array|Closure
    */
-  private function verifyRoute(string $url, string $method): array|Closure
+  private function verifyRoute(string $url, string $method): array|Closure|null
   {
     // check if the route exists with params
     foreach ($this->routes[$method] as $route => $callable) {
@@ -96,7 +96,10 @@ class HttpKernel
       }
     }
     // route not found
-    throw new \Exception("Route not found: $url");
+    http_response_code(404);
+    $reshandler = new HttpResponseCodeHandler;
+    $reshandler->NotFound();
+    return null;
   }
 
   /**

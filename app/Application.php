@@ -30,6 +30,7 @@ class Application
   public function start(): void
   {
     $request = self::$httpKernel->handleRoute($_SERVER['REQUEST_URI'], self::getRequestMethod());
+    if(is_null($request)) exit();
     $params = $request[1];
     if(is_array($request)) {
       $this->currentRequestClass = new $request[0][0]();
