@@ -19,7 +19,7 @@ $app = require_once __DIR__. '/../app/app.php';
 require_once dirname(__DIR__). '/routes/web.php';
 
 // Require some helper functions
-require_once dirname(__DIR__) . '/app/Functions/index.php';
+require_once dirname(__DIR__) . '/app/Helpers/Functions/functions.php';
 
 // Start the application
 $app->start();
