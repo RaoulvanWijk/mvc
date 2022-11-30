@@ -4,6 +4,18 @@ namespace App\Http\Requests;
 
 class Request 
 {
+  public array $parameters = [];
+
+  public function __set($key, $val)
+  {
+    $this->parameters[$key] = $val;
+  }
+
+  public function __get($key)
+  {
+    return $this->parameters[$key];
+  }
+
   public function __construct(array $data = null, $useCSRF = true)
   {
     if(!isset($data)) {
@@ -165,7 +177,7 @@ class Request
   public function setProperties(array $data)
   {
     foreach($data as $key => $value) {
-      $this->{$key} = $value;
+      $this->__set($key, $value);
     }
   }
 
