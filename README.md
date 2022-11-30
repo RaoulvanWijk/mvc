@@ -67,7 +67,7 @@ $ php mvc make:middleware NameOfTheMiddleware
 ### Adding middleware to a route
 Adding middleware to a single route
 ```php
-Route::middleware("nameOfMiddleware")->get('url', [DemoController:class, 'method'], "anotherRouteInGroup")
+Route::get('url', [DemoController:class, 'method'], "anotherRouteInGroup", middleware: "nameOfMiddleware");
 ```
 
 
@@ -75,7 +75,7 @@ Adding middleware to grouped routes
 ```php
 Route::prefix('/demo')->group(function() {
   Route::get('/url', [DemoController:class, 'method'], "route");
-}, ["middleware" => ["nameOfMiddleware"]])
+}, ["middleware" => ["nameOfMiddleware"]]);
 ```
 
 

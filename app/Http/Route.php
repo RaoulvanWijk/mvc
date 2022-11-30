@@ -17,9 +17,10 @@ class Route
    * @param string $name
    * @return void
    */
-  public static function get(string $path, Closure|array $callable, string $name): void
+  public static function get(string $path, Closure|array $callable, string $name, string|array $middleware = [])
   {
-    Application::$httpKernel->registerRoute('GET', self::$prefix . $path, $callable, $name, self::$middleware);
+    if(is_string($middleware)) $middleware = [$middleware];
+    Application::$httpKernel->registerRoute('GET', self::$prefix . $path, $callable, $name, array_merge(self::$middleware));
   }
 
   /**
@@ -29,9 +30,10 @@ class Route
    * @param string $name
    * @return void
    */
-  public static function post(string $path, Closure|array $callable, string $name): void
+  public static function post(string $path, Closure|array $callable, string $name, string|array $middleware = []): void
   {
-    Application::$httpKernel->registerRoute('POST', self::$prefix . $path, $callable, $name, self::$middleware);
+    if(is_string($middleware)) $middleware = [$middleware];
+    Application::$httpKernel->registerRoute('POST', self::$prefix . $path, $callable, $name, array_merge(self::$middleware, $middleware));
   }
 
   /**
@@ -41,9 +43,10 @@ class Route
    * @param string $name
    * @return void
    */
-  public static function put(string $path, Closure|array $callable, string $name): void
+  public static function put(string $path, Closure|array $callable, string $name, string|array $middleware = []): void
   {
-    Application::$httpKernel->registerRoute('PUT', self::$prefix . $path, $callable, $name, self::$middleware);
+    if(is_string($middleware)) $middleware = [$middleware];
+    Application::$httpKernel->registerRoute('PUT', self::$prefix . $path, $callable, $name, array_merge(self::$middleware, $middleware));
   }
 
   /**
@@ -53,9 +56,10 @@ class Route
    * @param string $name
    * @return void
    */
-  public static function delete(string $path, Closure|array $callable, string $name): void
+  public static function delete(string $path, Closure|array $callable, string $name, string|array $middleware = []): void
   {
-    Application::$httpKernel->registerRoute('DELETE', self::$prefix . $path, $callable, $name, self::$middleware);
+    if(is_string($middleware)) $middleware = [$middleware];
+    Application::$httpKernel->registerRoute('DELETE', self::$prefix . $path, $callable, $name, array_merge(self::$middleware, $middleware));
   }
 
   /**
@@ -86,12 +90,6 @@ class Route
     return new self();
   }
   
-  // create a function that will register middleware to a route
-  // public static function middleware(string $name, $callable)
-  // {
-  //   Application::$httpKernel->middleware($name, $callable);
-  //   return new self;
-  // }
 
   /**
    * This method will return the route by name
@@ -105,5 +103,14 @@ class Route
       $route = str_replace('{' . $key . '}', $value, $route);
     }
     return $route;
+  }
+
+
+  public static function middleware(string|array $middlewareName)
+  {
+    dump(debug_backtrace());
+    if(is_string($middlewareName)) $middlewareName = [$middlewareName];
+    self::$middleware = $middlewareName;
+    return new Self();
   }
 }
