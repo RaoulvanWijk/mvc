@@ -88,7 +88,10 @@ class DemoController extends Controller
 {
   public function demo()
   {
-    $this->view('views/file.php');
+    // Filename in resources folder
+    $this->view('file');
+
+
   }
 }
 ```
