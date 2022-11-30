@@ -8,6 +8,7 @@ class Route
 {
 
   private static string $prefix = "";
+  private static array $middleware = [];
 
   /**
    * This method will be used to register a GET route
@@ -18,7 +19,7 @@ class Route
    */
   public static function get(string $path, Closure|array $callable, string $name): void
   {
-    Application::$httpKernel->registerRoute('GET', self::$prefix . $path, $callable, $name);
+    Application::$httpKernel->registerRoute('GET', self::$prefix . $path, $callable, $name, self::$middleware);
   }
 
   /**
@@ -30,7 +31,7 @@ class Route
    */
   public static function post(string $path, Closure|array $callable, string $name): void
   {
-    Application::$httpKernel->registerRoute('POST', self::$prefix . $path, $callable, $name);
+    Application::$httpKernel->registerRoute('POST', self::$prefix . $path, $callable, $name, self::$middleware);
   }
 
   /**
@@ -42,7 +43,7 @@ class Route
    */
   public static function put(string $path, Closure|array $callable, string $name): void
   {
-    Application::$httpKernel->registerRoute('PUT', self::$prefix . $path, $callable, $name);
+    Application::$httpKernel->registerRoute('PUT', self::$prefix . $path, $callable, $name, self::$middleware);
   }
 
   /**
@@ -54,7 +55,7 @@ class Route
    */
   public static function delete(string $path, Closure|array $callable, string $name): void
   {
-    Application::$httpKernel->registerRoute('DELETE', self::$prefix . $path, $callable, $name);
+    Application::$httpKernel->registerRoute('DELETE', self::$prefix . $path, $callable, $name, self::$middleware);
   }
 
   /**
@@ -73,19 +74,24 @@ class Route
    * @param Closure $callable
    * @return self
    */
-  public static function group(Closure $callable): self
+  public static function group(Closure $callable, array $attributes = []): self
   {
+    if(isset($attributes["middleware"])) {
+      if(is_string($attributes["middleware"])) $attributes["middleware"] = [$attributes["middleware"]];
+      self::$middleware = $attributes["middleware"];
+    }
     $callable();
     self::$prefix = "";
+    self::$middleware = [];
     return new self();
   }
   
   // create a function that will register middleware to a route
-  public static function middleware(string $name, $callable)
-  {
-    Application::$httpKernel->middleware($name, $callable);
-    return new self;
-  }
+  // public static function middleware(string $name, $callable)
+  // {
+  //   Application::$httpKernel->middleware($name, $callable);
+  //   return new self;
+  // }
 
   /**
    * This method will return the route by name
