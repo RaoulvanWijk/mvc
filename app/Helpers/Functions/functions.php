@@ -20,3 +20,9 @@ function back()
 {
   return $_SERVER['HTTP_REFERER'];
 }
+
+
+function session($key)
+{
+  return $_SESSION[$key];
+}
