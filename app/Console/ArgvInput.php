@@ -36,6 +36,7 @@ class ArgvInput
       $this->help();
     } else if($this->argv[1] == $this->options['serve']) {
       $this->serve();
+      exit;
     } elseif(str_starts_with($this->argv[1], "make")) {
       $cmd = explode(":", $this->argv[1]);
       if(!isset($this->options["make"][$cmd[1]])) {
@@ -67,9 +68,9 @@ class ArgvInput
           echo "The command {$cmd[1]} does not exists";
           exit;
       }
+      $this->template = str_replace("{{ name }}", $this->argv[2], $this->template);
+      $this->createFile();
     }
-    $this->template = str_replace("{{ name }}", $this->argv[2], $this->template);
-    $this->createFile();
   }
   
   /**
@@ -78,8 +79,8 @@ class ArgvInput
    */
   public function serve(): void
   {
-    echo "Starting server on port 8000";
-    exec("php -S localhost:8000 -t public");
+    echo "Starting server on " . $_ENV['APP_CMD_URL'];
+    exec("php -S ".$_ENV['APP_CMD_URL']." -t public");
   }
 
   /**
