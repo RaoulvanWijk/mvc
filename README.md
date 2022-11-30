@@ -35,16 +35,22 @@ Go to the web.php file in the routes folder
 use App\Http\Route;
 use App\Http\Controllers\DemoController;
 
-Route::get('url', [DemoController:class, 'method'], name);
-Route::post('url', [DemoController:class, 'method'], name);
-Route::put('url', [DemoController:class, 'method'], name);
-Route::delete('url', [DemoController:class, 'method'], name);
+Route::get('url', [DemoController:class, 'method'], "name");
+Route::post('url', [DemoController:class, 'method'], "name");
+Route::put('url', [DemoController:class, 'method'], "name");
+Route::delete('url', [DemoController:class, 'method'], "name");
+```
+
+Route parameters
+```php
+Route::get('url/{id}/another/{param}', [DemoController:class, 'method'], "name");
 ```
 
 ### Grouped routes
 ```php
 Route::prefix('/demo')->group(function() {
-  	Route::get('url', [DemoController:class, 'method'], name);
+  	Route::get('url', [DemoController:class, 'method'], "route");
+    Route::get('url', [DemoController:class, 'method'], "anotherRouteInGroup");
 });
 ```
 
@@ -159,7 +165,7 @@ To create a request class use the following command
 $ php mvc make:request NameOfRequestClass
 ```
 
-## Specifying the rules
+### Specifying the rules
 To validate the data you need to use the `rules()` function as following:
 
 ```php
@@ -172,7 +178,7 @@ To validate the data you need to use the `rules()` function as following:
   }
 ```
 
-## using `authorize()`
+### using `authorize()`
 
 At the moment there is no middleware so you can use the `authorize()` functions to act as middleware
 
