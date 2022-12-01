@@ -32,13 +32,13 @@ class Application
     $request = self::$httpKernel->handleRoute($_SERVER['REQUEST_URI'], self::getRequestMethod());
     if(is_null($request)) exit();
     $params = $request[1];
-    if(is_array($request)) {
+    if(is_array($request[0])) {
       $this->currentRequestClass = new $request[0][0]();
       $this->currentMethod = $request[0][1];
       self::validateRequest();
       call_user_func_array([$this->currentRequestClass, $this->currentMethod], $params);
     } else {
-      $request($params);
+      $request[0]($params);
     }
   }
 
