@@ -23,7 +23,17 @@ use \PDOException;
             if(!is_null($dbName)) {
                 $this->dbName = $dbName;
             }
-            $this->ConnectionMySql();
+            switch(strtolower($_ENV["DB_CONNECTION"])) {
+                case "sqlserver":
+                    $this->ConnectionSqlServer();
+                    break;
+                case "mysql":
+                    $this->ConnectionMySql();
+                    break;
+                default:
+                    dd("no sql server specified");
+                break;
+            }
         }
 
         private function ConnectionMySql()
@@ -38,7 +48,7 @@ use \PDOException;
         private function ConnectionSqlServer()
         {
             // For SqlServer
-            $conn = 'sqlsrv:Server=' . $this->dbHost . 'Database=' . $this->dbName;
+            $conn = 'sqlsrv:Server=' . $this->dbHost . ';Database=' . $this->dbName;
             $options = array(PDO::ATTR_PERSISTENT => true, PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION);
 
             $this->dbHandler = new PDO($conn, $this->dbUser, $this->dbPass);
