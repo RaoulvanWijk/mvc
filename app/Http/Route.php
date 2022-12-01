@@ -82,7 +82,7 @@ class Route
   {
     if(isset($attributes["middleware"])) {
       if(is_string($attributes["middleware"])) $attributes["middleware"] = [$attributes["middleware"]];
-      self::$middleware = $attributes["middleware"];
+      self::$middleware = array_merge(self::$middleware, $attributes["middleware"]);
     }
     $callable();
     self::$prefix = "";
