@@ -13,7 +13,7 @@ function method($method)
 
 function route(string $name, array $params = [])
 {
-  \App\Http\Route::route($name, $params);
+  return \App\Http\Route::route($name, $params);
 }
 
 function back()
