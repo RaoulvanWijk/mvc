@@ -26,3 +26,11 @@ function session($key)
 {
   return $_SESSION[$key];
 }
+
+function view(string $view, array $data)
+{
+  foreach($data as $key => $val) {
+  ${$key} = $val;
+  }
+  require_once dirname(dirname(dirname(__DIR__))). "/resources/views/". $view .".php"; 
+}
