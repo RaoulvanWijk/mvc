@@ -27,7 +27,7 @@ function session($key)
   return $_SESSION[$key];
 }
 
-function view(string $view, array $data)
+function view(string $view, array $data = [])
 {
   foreach($data as $key => $val) {
   ${$key} = $val;
