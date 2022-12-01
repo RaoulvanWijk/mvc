@@ -40,11 +40,11 @@ class ArgvInput
     } elseif(str_starts_with($this->argv[1], "make")) {
       $cmd = explode(":", $this->argv[1]);
       if(!isset($this->options["make"][$cmd[1]])) {
-        echo "The command {$cmd[1]} does not exists";
+        echo "\e[31mThe command {$cmd[1]} does not exists\e[39m";
         exit;
       }
       if(!isset($this->argv[2])) {
-        echo "Please provide a name for the {$cmd[1]}";
+        echo "\e[33mPlease provide a name for the {$cmd[1]}\e[39m";
         exit;
       }
       switch($cmd[1]) {
@@ -65,11 +65,14 @@ class ArgvInput
           $this->template = self::request();
           break;
         default:
-          echo "The command {$cmd[1]} does not exists";
+          echo "\e[31mThe command {$cmd[1]} does not exists\e[39m";
           exit;
       }
       $this->template = str_replace("{{ name }}", $this->argv[2], $this->template);
       $this->createFile();
+    } else {
+      echo "\e[31mThe command {$this->argv[1]} does not exists\e[39m";
+      exit;
     }
   }
   
@@ -79,7 +82,7 @@ class ArgvInput
    */
   public function serve(): void
   {
-    echo "Starting server on " . $_ENV['APP_CMD_URL'];
+    echo "\e[32mStarting server on \e[39m" . $_ENV['APP_CMD_URL'];
     exec("php -S ".$_ENV['APP_CMD_URL']." -t public");
   }
 
@@ -145,7 +148,7 @@ class ArgvInput
     $file = fopen(__DIR__ . "/../{$this->fileType}/{$this->argv[2]}.php", "w");
     fwrite($file, $this->template);
     fclose($file);
-    echo "File created successfully at " . __DIR__ . "/../{$this->fileType}/{$this->argv[2]}.php";
+    echo "\e[32mFile created successfully at \e[39m " . __DIR__ . "/../{$this->fileType}/{$this->argv[2]}.php";
     exit;
   }
 }
