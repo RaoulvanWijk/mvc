@@ -34,3 +34,8 @@ function view(string $view, array $data = [])
   }
   require_once dirname(dirname(dirname(__DIR__))). "/resources/views/". $view .".php"; 
 }
+
+function errors()
+{
+  return $_SESSION[$_SERVER["HTTP_REFERER"]]["request_errors"];
+}
