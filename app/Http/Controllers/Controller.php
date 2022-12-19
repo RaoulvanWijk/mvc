@@ -57,8 +57,21 @@ abstract class Controller
    */
   protected function with($key, $value = null): self
   {
-    $_SESSION[$key] = $value;
+    session()->flash($key, $value);
     return $this;
   }
+
+  /**
+   * This method will be used to redirect the user with errors stored in the session
+   * @param array $errors
+   * @return $this
+   */
+  protected function withErrors($errors): self
+  {
+    session()->flash('errors', $errors);
+    return $this;
+  } 
+
+
 
 }
