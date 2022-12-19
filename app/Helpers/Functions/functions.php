@@ -1,41 +1,65 @@
 <?php
 
+use App\Application;
+use App\Helpers\Support\Session;
+
+/**
+ * This function will be used to return a html input with the csrf token
+ */
 function csrf()
 {
   $_SESSION['_token'] = bin2hex(random_bytes(32));
   return '<input type="hidden" name="_token" value="' . $_SESSION['_token'] . '">';
 }
 
+/**
+ * This function will be used to return a html input with the method
+ */
 function method($method)
 {
   return '<input type="hidden" name="_method" value="' . $method . '">';
 }
 
+/**
+ * This function will be used to get the route by name
+ */
 function route(string $name, array $params = [])
 {
   return \App\Http\Route::route($name, $params);
 }
 
+/**
+ * This function will return the previous url
+ * @return string
+ */
 function back()
 {
   return $_SERVER['HTTP_REFERER'];
 }
 
-
-function session($key)
+/**
+ * This function will be used to get the session
+ * @param string $key
+ * @return Session | string | null
+ */
+function session($key = null) : Session | string | null
 {
-  return $_SESSION[$key];
+  if (is_null($key)) {
+    return Application::$session;
+  }
+  return Application::$session->get($key);
 }
 
+/**
+ * This function will be used to load a view
+ * @param string $view
+ * @param array $data
+ * @return void
+ */
 function view(string $view, array $data = [])
 {
   foreach($data as $key => $val) {
   ${$key} = $val;
   }
   require_once dirname(dirname(dirname(__DIR__))). "/resources/views/". $view .".php"; 
-}
-
-function errors()
-{
-  return $_SESSION[$_SERVER["HTTP_REFERER"]]["request_errors"];
 }
