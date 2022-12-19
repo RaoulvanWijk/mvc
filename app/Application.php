@@ -2,7 +2,7 @@
 
 namespace App;
 
-
+use App\Helpers\Support\Session;
 use App\Http\HttpKernel;
 /**
  * This class will be used to handle the application
@@ -11,6 +11,9 @@ class Application
 {
   // reference to the HttpKernel
   public static HttpKernel $httpKernel;
+
+  // reference to the Session
+  public static Session $session;
 
   // This will be used to store the Requestclass that is needed
   private object $currentRequestClass;
@@ -23,6 +26,9 @@ class Application
   public function __construct()
   {
       self::$httpKernel = new HttpKernel();
+      if(!isset(self::$session)) {
+        self::$session = new Session();
+      }
   }
 
   /**
