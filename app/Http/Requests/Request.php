@@ -40,15 +40,26 @@ class Request
    */
   public function validate(array $data, array $rules = [], bool $useCSRF = true)
   {
+
     if(!$this->authorize()) {
       throw new \Exception('Not authorized');
     }
     if($useCSRF) {
       if(!isset($data['_token']) || !session()->has("_token")) {
-        throw new \Exception('CSRF token mismatch');
+        if($_ENV["APP_ENV"] === "dev" || $_ENV["APP_ENV"] === "local" || $_ENV["APP_ENV"] === "development") {
+          throw new \Exception('CSRF token mismatch please check if the csrf() function is used in the form');
+        } else {
+          $this->request_errors[] = "CSRF token mismatch";
+          $this->redirectIfFailed();
+        }
       }
       if(!hash_equals(session("_token"), $data['_token'])) {
-        throw new \Exception('CSRF token mismatch');
+        if($_ENV["APP_ENV"] === "dev" || $_ENV["APP_ENV"] === "local" || $_ENV["APP_ENV"] === "development") {
+          throw new \Exception('CSRF token mismatch please check if the csrf() function is used in the form');
+        } else {
+          $this->request_errors[] = "CSRF token mismatch";
+          $this->redirectIfFailed();
+        }
       }
       session()->remove("_token");
     }
@@ -177,9 +188,7 @@ class Request
         }
       }
       if(count($this->request_errors) > 0) {
-        session()->flash('errors', $this->request_errors);
-        $redirect = $this->redirect_if_failed ?: $_SERVER["HTTP_REFERER"];
-        header("Location: $redirect");
+        $this->redirectIfFailed();
       }
     }
     $this->setProperties($data);
@@ -194,6 +203,13 @@ class Request
     foreach($data as $key => $value) {
       $this->__set($key, $value);
     }
+  }
+
+  public function redirectIfFailed()
+  {
+    session()->flash('errors', $this->request_errors);
+    $redirect = $this->redirect_if_failed ?: $_SERVER["HTTP_REFERER"];
+    header("Location: $redirect");
   }
 
   /**
