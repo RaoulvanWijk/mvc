@@ -357,7 +357,24 @@ class Model
    * @param string $query
    * @param array $binds
    */
-  protected function exec($query, $binds = []) : mixed
+  protected function exec($query, $binds = [])
+  {
+    $this->db->query($query);
+    if(!empty($binds)) {
+      foreach ($binds as $key => $value) {
+        $this->db->bind($key, $value);
+      }
+    }
+    $this->db->execute();
+  }
+
+  /**
+   * This method is used to execute a query and return the data without the models query builder
+   * @param string $query
+   * @param array $binds
+   * @return array
+   */
+  protected function query($query, $binds = []) : mixed 
   {
     $this->db->query($query);
     if(!empty($binds)) {
@@ -367,5 +384,4 @@ class Model
     }
     return $this->db->execute();
   }
-
 }
