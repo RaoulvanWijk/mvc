@@ -6,9 +6,9 @@ class Request
 {
   public array $parameters = [];
 
-  public array $request_errors;
+  public array $request_errors = [];
 
-  public string $redirect_if_failed;
+  public ?string $redirect_if_failed = null;
 
   public function __set($key, $val)
   {
@@ -65,59 +65,59 @@ class Request
       {
         if($r === 'required')
         {
-          if(!isset($data[$key]))
+          if(!isset($data[$key]) || empty($data[$key]))
           {
-            self::$request_errors[] = "The $key field is required";
+            $this->request_errors[] = "The $key field is required";
           }
         } elseif($r === "int") {
           if(!is_int($data[$key]))
           {
-            self::$request_errors[] = "The $key field must be an integer";
+            $this->request_errors[] = "The $key field must be an integer";
           }
         } elseif($r === "string") {
           if(!is_string($data[$key]))
           {
-            self::$request_errors[] = "The $key field must be a string";
+            $this->request_errors[] = "The $key field must be a string";
           }
         } elseif($r === "array") {
           if(!is_array($data[$key]))
           {
-            self::$request_errors[] = "The $key field must be an array";
+            $this->request_errors[] = "The $key field must be an array";
           }
         } elseif($r === "bool") {
           if(!is_bool($data[$key]))
           {
-            self::$request_errors[] = "The $key field must be a boolean";
+            $this->request_errors[] = "The $key field must be a boolean";
           }
         } elseif($r === "float") {
           if(!is_float($data[$key]))
           {
-            self::$request_errors[] = "The $key field must be a float";
+            $this->request_errors[] = "The $key field must be a float";
           }
         } elseif($r === "numeric") {
           if(!is_numeric($data[$key]))
           {
-            self::$request_errors[] = "The $key field must be a numeric";
+            $this->request_errors[] = "The $key field must be a numeric";
           }
         } elseif($r === "email") {
           if(!filter_var($data[$key], FILTER_VALIDATE_EMAIL))
           {
-            self::$request_errors[] = "The $key field must be a valid email";
+            $this->request_errors[] = "The $key field must be a valid email";
           }
         } elseif($r === "url") {
           if(!filter_var($data[$key], FILTER_VALIDATE_URL))
           {
-            self::$request_errors[] = "The $key field must be a valid url";
+            $this->request_errors[] = "The $key field must be a valid url";
           }
         } elseif($r === "ip") {
           if(!filter_var($data[$key], FILTER_VALIDATE_IP))
           {
-            self::$request_errors[] = "The $key field must be a valid ip address";
+            $this->request_errors[] = "The $key field must be a valid ip address";
           }
         } elseif($r === "mac") {
           if(!filter_var($data[$key], FILTER_VALIDATE_MAC))
           {
-            self::$request_errors[] = "The $key field must be a valid mac address";
+            $this->request_errors[] = "The $key field must be a valid mac address";
           }
         } elseif(str_contains($r, ':')) {
           $r = explode(':', $r);
@@ -125,54 +125,59 @@ class Request
           {
             if(strlen($data[$key]) < $r[1])
             {
-              self::$request_errors[] = "The $key field must be at least $r[1] characters";
+              $this->request_errors[] = "The $key field must be at least $r[1] characters";
             }
           } elseif($r[0] === "max") {
             if(strlen($data[$key]) > $r[1])
             {
-              self::$request_errors[] = "The $key field must be at most $r[1] characters";
+              $this->request_errors[] = "The $key field must be at most $r[1] characters";
+            }
+          } elseif($r[0] === "len") {
+            if(strlen($data[$key]) != $r[1])
+            {
+              $this->request_errors[] = "The $key field must be $r[1] characters";
             }
           } elseif($r[0] === "between") {
             if(strlen($data[$key]) < $r[1] || strlen($data[$key]) > $r[2])
             {
-              self::$request_errors[] = "The $key field must be between $r[1] and $r[2] characters";
+              $this->request_errors[] = "The $key field must be between $r[1] and $r[2] characters";
             }
           } elseif($r[0] === "min_num") {
             if($data[$key] < $r[1])
             {
-              self::$request_errors[] = "The $key field must be at least $r[1]";
+              $this->request_errors[] = "The $key field must be at least $r[1]";
             }
           } elseif($r[0] === "max_num") {
             if($data[$key] > $r[1])
             {
-              self::$request_errors[] = "The $key field must be at most $r[1]";
+              $this->request_errors[] = "The $key field must be at most $r[1]";
             }
           } elseif($r[0] === "between_num") {
             if($data[$key] < $r[1] || $data[$key] > $r[2])
             {
-              self::$request_errors[] = "The $key field must be between $r[1] and $r[2]";
+              $this->request_errors[] = "The $key field must be between $r[1] and $r[2]";
             }
           } elseif($r[0] === "min_float") {
             if($data[$key] < $r[1])
             {
-              self::$request_errors[] = "The $key field must be at least $r[1]";
+              $this->request_errors[] = "The $key field must be at least $r[1]";
             }
           } elseif($r[0] === "max_float") {
             if($data[$key] > $r[1])
             {
-              self::$request_errors[] = "The $key field must be at most $r[1]";
+              $this->request_errors[] = "The $key field must be at most $r[1]";
             }
           } elseif($r[0] === "between_float") {
             if($data[$key] < $r[1] || $data[$key] > $r[2])
             {
-              self::$request_errors[] = "The $key field must be between $r[1] and $r[2]";
+              $this->request_errors[] = "The $key field must be between $r[1] and $r[2]";
             }
           }
         }
       }
-      if(count(self::$request_errors) > 0) {
-        $_SESSION[$_SERVER["REQUEST_URI"]]["request_errors"] = self::$request_errors;
-        $redirect = $this->redirect_if_failed ? : $_SERVER["HTTP_REFERER"];
+      if(count($this->request_errors) > 0) {
+        session()->flash('errors', $this->request_errors);
+        $redirect = $this->redirect_if_failed ?: $_SERVER["HTTP_REFERER"];
         header("Location: $redirect");
       }
     }
