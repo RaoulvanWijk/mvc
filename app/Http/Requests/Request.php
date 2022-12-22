@@ -40,7 +40,6 @@ class Request
    */
   public function validate(array $data, array $rules = [], bool $useCSRF = true)
   {
-    if(count($rules) == 0) return;
     if(!$this->authorize()) {
       throw new \Exception('Not authorized');
     }
@@ -52,12 +51,13 @@ class Request
         throw new \Exception('CSRF token mismatch');
       }
     }
-
+    
     // Validate the data
     // Specify by the rules
     // If the data is not valid, throw an exception
-
+    
     $rules = $rules ? $rules : $this->rules();
+    if(count($rules) == 0) return;
     foreach($rules as $key => $rule)
     {
       $rule = explode('|', $rule);
