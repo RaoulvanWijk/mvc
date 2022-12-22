@@ -352,4 +352,20 @@ class Model
     return strtolower($className) . 's';
   }
 
+  /**
+   * This method is used to execute a query without the models query builder
+   * @param string $query
+   * @param array $binds
+   */
+  protected function exec($query, $binds = []) : mixed
+  {
+    $this->db->query($query);
+    if(!empty($binds)) {
+      foreach ($binds as $key => $value) {
+        $this->db->bind($key, $value);
+      }
+    }
+    return $this->db->execute();
+  }
+
 }
