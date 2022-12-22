@@ -61,5 +61,8 @@ function view(string $view, array $data = [])
   foreach($data as $key => $val) {
   ${$key} = $val;
   }
+  if(!file_exists(dirname(dirname(dirname(__DIR__))). "/resources/views/". $view .".php")) {
+    throw new Exception("View not found at ". dirname(dirname(dirname(__DIR__))). "/resources/views/". $view .".php");
+  }
   require_once dirname(dirname(dirname(__DIR__))). "/resources/views/". $view .".php"; 
 }
