@@ -44,12 +44,13 @@ class Request
       throw new \Exception('Not authorized');
     }
     if($useCSRF) {
-      if(!isset($data['_token']) || !isset($_SESSION['_token'])) {
+      if(!isset($data['_token']) || !session()->has("_token")) {
         throw new \Exception('CSRF token mismatch');
       }
-      if(!hash_equals($_SESSION['_token'], $data['_token'])) {
+      if(!hash_equals(session("_token"), $data['_token'])) {
         throw new \Exception('CSRF token mismatch');
       }
+      session()->remove("_token");
     }
     
     // Validate the data
