@@ -59,6 +59,7 @@ function session($key = null) : Session | string | null
  */
 function view(string $view, array $data = [])
 {
+  $errors = session()->errors();
   foreach($data as $key => $val) {
   ${$key} = $val;
   }
