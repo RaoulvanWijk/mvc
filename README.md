@@ -189,6 +189,14 @@ example below
   }
 ```
 
+If you dont want to use the query builder you can also execute sql statements by using:
+```php
+  public function Demo()
+  {
+    return Progress::query('SELECT * FROM users');
+  }
+```
+
 At the end of every builded query you need to use
 ```php
 ->get();
@@ -196,7 +204,7 @@ At the end of every builded query you need to use
 to execute the sql statement
 
 ## Requests
-In this framework you can use a request class to validate request and request data
+In this framework you can use a request class to validate the request data before it gets to the controller and redirects the user back to the previous page with a errors
 
 ### Creating a request class
 To create a request class use the following command
@@ -216,6 +224,12 @@ To validate the data you need to use the `rules()` function as following:
     ];
   }
 ```
+
+You can also specify what url the request is gona redirect to if it has failed
+```php
+$redirect_if_failed = 'name_of_route';
+```
+
 
 ### using `authorize()`
 U can use the authorize function to validate if a user is allowed to make the request
