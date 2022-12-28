@@ -72,7 +72,7 @@ class Model
    * @param array $columns
    * @return $this
    */
-  public function select(array ...$columns):self
+  public function select(...$columns):self
   {
     $this->query = 'SELECT ';
     if(count($columns) > 0) {
@@ -140,7 +140,7 @@ class Model
   public function whereRaw(string $where, array $binds = []): self
   {
     $this->query .= ' WHERE ' . $where;
-    $this->binds = $binds;
+    $this->binds = array_merge($this->binds, $binds);
     return $this;
   }
 
@@ -153,9 +153,27 @@ class Model
   public function orWhereRaw(string $where, array $binds = []): self
   {
     $this->query .= ' OR ' . $where;
-    $this->binds = $binds;
+    $this->binds = array_merge($this->binds, $binds);
     return $this;
   }
+
+  public function andWhereRaw(string $where, array $binds = []): self
+  {
+    $this->query .= ' AND ' . $where;
+    $this->binds = array_merge($this->binds, $binds);
+    return $this;
+  }
+
+  public function andWhere(...$wheres): self
+  {
+    $this->query .= ' AND ';
+    foreach ($wheres as $where) {
+      $this->query .= $where . ' AND ';
+    }
+    $this->query = substr($this->query, 0, -4);
+    return $this;
+  }
+
 
   /**
    * having
@@ -196,7 +214,7 @@ class Model
   public function havingRaw(string $having, array $binds = []): self
   {
     $this->query .= ' HAVING ' . $having;
-    $this->binds = $binds;
+    $this->binds = array_merge($this->binds, $binds);
     return $this;
   }
 
@@ -209,7 +227,7 @@ class Model
   public function orHavingRaw(string $having, array $binds = []): self
   {
     $this->query .= ' OR ' . $having;
-    $this->binds = $binds;
+    $this->binds = array_merge($this->binds, $binds);
     return $this;
   }
 
@@ -357,24 +375,7 @@ class Model
    * @param string $query
    * @param array $binds
    */
-  protected function exec($query, $binds = [])
-  {
-    $this->db->query($query);
-    if(!empty($binds)) {
-      foreach ($binds as $key => $value) {
-        $this->db->bind($key, $value);
-      }
-    }
-    $this->db->execute();
-  }
-
-  /**
-   * This method is used to execute a query and return the data without the models query builder
-   * @param string $query
-   * @param array $binds
-   * @return array
-   */
-  protected function query($query, $binds = []) : mixed 
+  protected function exec($query, $binds = []) : mixed
   {
     $this->db->query($query);
     if(!empty($binds)) {
@@ -384,4 +385,5 @@ class Model
     }
     return $this->db->execute();
   }
+
 }
