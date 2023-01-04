@@ -2,12 +2,14 @@
 
 namespace App\Http\Middleware;
 
+use Psr\Http\Message\ResponseInterface as Response;
+use Psr\Http\Message\ServerRequestInterface as Request;
 use Closure;
-use App\Http\Requests\Request;
 
-interface Middleware
+class Middleware
 {
-
-  public function __invoke(Closure $next, Request $request);
-
-} 
+  public function process(Request $request, Closure $next): Response
+  {
+    return $next($request);
+  }
+}
