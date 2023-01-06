@@ -43,7 +43,7 @@ class Container implements ContainerInterface
    * @param bool $singleton
    * @return array|void
    */
-  public function bind(string $id, string | callable | object $concrete, bool $singleton = false)
+  public function bind(string $id, string | callable | object $concrete, bool $singleton = false): mixed
   {
     if($singleton) {
         if(!is_object($concrete)) {

@@ -3,6 +3,7 @@ namespace App;
 
 use App\Http\HttpKernel\Router;
 use App\Support\Container;
+use Exception;
 
 class Application
 {
@@ -25,7 +26,7 @@ class Application
   /**
    * Call all the boot methods of necessary classes
    * @return void
-   * @throws \Exception
+   * @throws Exception
    */
   public function boot(): void
   {
@@ -35,7 +36,7 @@ class Application
   }
 
   /**
-   * This function will return wether or not the application has booted
+   * This function will return weather or not the application has booted
    * @return bool
    */
   public function isBooted(): bool
@@ -45,11 +46,11 @@ class Application
 
   /**
    * Register a new binding in the container
-  * @param string $id
-  * @param string|callable $concrete
-  * @return void
-  */
-  public static function make(string $id, string|callable $concrete)
+   * @param string $id
+   * @param string|callable $concrete
+   * @return mixed
+   */
+  public static function make(string $id, string|callable $concrete): mixed
   {
     return static::$container->bind($id, $concrete);
   }
@@ -70,7 +71,7 @@ class Application
    * @param string $id
    * @return mixed
    */
-  public function get(string $id)
+  public function get(string $id): mixed
   {
     return static::$container->get($id);
   }
