@@ -15,7 +15,7 @@ class MakeCommand
     $file = fopen(__DIR__. "/$name.php", "w");
     fwrite($file, $template);
     fclose($file);
-    echo "\e[32mSuccessfully created a controller at \e[39m".realpath(__DIR__. "/$name.php");
+    echo "\e[32mSuccessfully created a command at \e[39m".realpath(__DIR__. "/$name.php");
     } else echo "\e[31mFile already exists at \e[39m".realpath(__DIR__. "/$name.php");
   }
 
