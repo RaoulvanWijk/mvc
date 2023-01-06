@@ -25,11 +25,12 @@ class MakeMiddleware
 
 namespace App\Http\Middleware;
 
-use Psr\Http\Message\ResponseInterface as Response;
+use App\Contracts\MiddlewareInterface;use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
+use App\Contracts\MiddlewareInterface;
 use Closure;
 
-class {{ name }}
+class {{ name }} implements MiddlewareInterface
 {
   public function process(Request $request, Closure $next): Response
   {
