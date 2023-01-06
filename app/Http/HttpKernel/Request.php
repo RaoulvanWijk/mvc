@@ -410,7 +410,7 @@ class Request implements ServerRequestInterface
     $parsedUrl = parse_url($_SERVER["REQUEST_URI"]);
     return new static(
       $_SERVER["REQUEST_URI"],
-      $_SERVER['REQUEST_METHOD'],
+      $_POST["_method"] ?? $_SERVER['REQUEST_METHOD'],
       new Uri(
         $_SERVER['REQUEST_SCHEME'] ?? 'http',
         $_SERVER['SERVER_NAME'] ?? "localhost",
