@@ -40,12 +40,12 @@ class {{ name }}
     
   }
 
-  public function getUsage()
+  public function getUsage(): string
   {
     return "";
   }
 
-  public function getArgs()
+  public function getArgs(): array
   {
     return [
 
