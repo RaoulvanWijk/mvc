@@ -13,9 +13,10 @@ if(!function_exists("view")) {
     function view($file, array $data = []): \App\Http\HttpKernel\Response
     {
         $twig = \App\Application::$container->get('twig');
+        $twig->addGlobal("methods", methods());
         $resource = fopen("php://temp", 'r+');
         $response = new \App\Http\HttpKernel\Response();
-        $response->getBody()->write($twig->render("index.twig", $data));
+        $response->getBody()->write($twig->render("$file.twig", $data));
         return $response;
     }
 }
@@ -47,5 +48,16 @@ if(!function_exists("redirect")) {
   function redirect(string $location, int $status, array $headers = []): \App\Http\HttpKernel\Response
   {
     return app(\App\Http\HttpKernel\Redirector::class)->to($location, $status, $headers);
+  }
+}
+
+if(!function_exists("methods")) {
+  function methods(): array
+  {
+    $methods = [];
+    foreach (\App\Http\HttpKernel\Route::$allowedMethods as $method) {
+      $methods[$method] = "<input type='hidden' name='_method' value='$method'>";
+    }
+    return $methods;
   }
 }
