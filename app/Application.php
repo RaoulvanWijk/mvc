@@ -29,6 +29,7 @@ class Application
    */
   public function boot(): void
   {
+    require_once dirname(__DIR__). "/configs/container.php";
     app(Router::class)->boot();
     $this->booted = true;
   }
@@ -48,7 +49,7 @@ class Application
   * @param string|callable $concrete
   * @return void
   */
-  public function make(string $id, string|callable $concrete)
+  public static function make(string $id, string|callable $concrete)
   {
     return static::$container->bind($id, $concrete);
   }
