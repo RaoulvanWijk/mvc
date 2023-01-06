@@ -169,12 +169,12 @@ class Response implements \Psr\Http\Message\ResponseInterface
   public function send(): void
   {
     // Send the response status line
-    header(sprintf('HTTP/%s %s %s', $this->protocol, $this->statusCode, $this->reasonPhrase), true, $this->statusCode);
+    \header(sprintf('HTTP/%s %s %s', $this->protocol, $this->statusCode, $this->reasonPhrase), true, $this->statusCode);
 
     // Send the response headers
     foreach ($this->headers as $name => $values) {
       foreach ($values as $value) {
-        header("$name: $value", false, $this->statusCode);
+        header("{$name}: {$value}", false);
       }
     }
 
