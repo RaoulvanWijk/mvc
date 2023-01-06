@@ -25,7 +25,7 @@ class Route
    * var used to store all the allowed http methods of which you can register a route to
    * @var array|string[]
    */
-  private static array $allowedMethods = [
+  public static array $allowedMethods = [
     'get',
     'post',
     'put',
