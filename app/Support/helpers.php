@@ -1,6 +1,5 @@
 <?php
 
-
 if(!function_exists("view")) {
   /**
    * This function will load a view
@@ -31,5 +30,22 @@ if(!function_exists("app")) {
   function app($id): mixed
   {
     return \App\Application::$container->get($id);
+  }
+}
+
+if(!function_exists("redirect")) {
+  /**
+   * This function will return a response
+   * with an added header('Location')
+   * to the given location
+   * @param string $location
+   * @param int $status
+   * @param array $headers
+   * @return \App\Http\HttpKernel\Response
+   * @throws Exception
+   */
+  function redirect(string $location, int $status, array $headers = []): \App\Http\HttpKernel\Response
+  {
+    return app(\App\Http\HttpKernel\Redirector::class)->to($location, $status, $headers);
   }
 }
