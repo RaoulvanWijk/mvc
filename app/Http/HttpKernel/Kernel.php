@@ -2,9 +2,9 @@
 
 namespace App\Http\HttpKernel;
 
-use App\Application;
 use App\Exceptions\Http\MiddlewareNotFound;
 use App\Http\Middleware\Middleware;
+use App\Http\Middleware\UseSession;
 use Exception;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
@@ -15,7 +15,7 @@ class Kernel implements RequestHandlerInterface
 {
   private array $routeHandler =[];
     private array $middleware = [
-      Middleware::class
+      //
     ];
 
   /**
@@ -24,11 +24,8 @@ class Kernel implements RequestHandlerInterface
    * @var array|string[]
    */
   private array $routeMiddleware = [
-    'test' => Middleware::class,
-    'check.user.type' => Middleware::class,
-    'api' => Middleware::class,
-    'werktdit' => Middleware::class,
-    'demo' => Middleware::class,
+    "use.session" => UseSession::class,
+    "api" => Middleware::class
   ];
 
   /**
