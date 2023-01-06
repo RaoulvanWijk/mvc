@@ -12,8 +12,6 @@ require_once __DIR__ . '/../app/Support/helpers.php';
 $app->boot();
 $httpKernel = $app->get(App\Http\HttpKernel\Kernel::class);
 
-//dd(\App\Http\HttpKernel\Route::getRoutes());
-
 try {
     $httpKernel->handle(
         $request = App\Http\HttpKernel\Request::capture()
