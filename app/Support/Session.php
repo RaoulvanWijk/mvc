@@ -82,7 +82,7 @@ class Session implements SessionInterface
   {
     return array_key_exists($key, $_SESSION["_flash"]);
   }
-  private function getFlash(string $key)
+  public function getFlash(string $key)
   {
     if($this->hasFlash($key)) {
       $value = $_SESSION["_flash"][$key];
