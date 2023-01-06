@@ -1,0 +1,6 @@
+<?php
+require_once __DIR__ . '/vendor/autoload.php';
+
+$cli = new \App\Console\CliRunner();
+
+$cli->handle($argv);
