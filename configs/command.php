@@ -6,4 +6,5 @@ return [
   "\e[33m make\e[39m\n",
   new \App\Console\Commands\MakeCommand(),
   new \App\Console\Commands\CreateController(),
+  new \App\Console\Commands\MakeMiddleware(),
 ];
