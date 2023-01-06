@@ -405,7 +405,7 @@ class Request implements ServerRequestInterface
    * @param $parsedBody
    * @return Request
    */
-  public static function capture(array $attributes = [], $parsedBody = []): Request
+  public static function capture(array $attributes = []): Request
   {
     $parsedUrl = parse_url($_SERVER["REQUEST_URI"]);
     return new static(
@@ -414,7 +414,7 @@ class Request implements ServerRequestInterface
       new Uri(
         $_SERVER['REQUEST_SCHEME'] ?? 'http',
         $_SERVER['SERVER_NAME'] ?? "localhost",
-        $_SERVER["REQUEST_URI"] ?? '/',
+          $parsedUrl["path"] ?? '/',
         $parsedUrl["query"] ?? '',
         $parsedUrl["fragment"] ?? ''
       ),
