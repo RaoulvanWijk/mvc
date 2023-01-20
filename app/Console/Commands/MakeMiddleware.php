@@ -2,10 +2,17 @@
 
 namespace App\Console\Commands;
 
-class MakeMiddleware
+class MakeMiddleware extends Command
 {
-  public string $defaultName = "make:middleware";
-  public string $defaultDescription = "Create a new Middleware";
+    protected string $defaultName = "make:middleware";
+    protected string $usage = "make:middleware [arguments] [options]";
+    protected array $arguments = [
+        "<name>" => "The name of the middleware"
+    ];
+    protected array $options = [
+        //
+    ];
+    protected string $defaultDescription = "Create a new middleware class";
 
   public function execute($name): void
   {
