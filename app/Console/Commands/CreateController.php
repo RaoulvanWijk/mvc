@@ -2,10 +2,17 @@
 
 namespace App\Console\Commands;
 
-class CreateController
+class CreateController extends Command
 {
-  public string $defaultName = "make:controller";
-  public string $defaultDescription = "Create a new controller";
+    protected string $defaultName = "make:controller";
+    protected string $usage = "make:controller [arguments] [options]";
+    protected array $arguments = [
+        "<name>" => "The name of the controller"
+    ];
+    protected array $options = [
+
+    ];
+    protected string $defaultDescription = "Serve the application on the PHP web server";
 
   public function execute($name): void
   {
@@ -18,18 +25,6 @@ class CreateController
       echo "\e[32mSuccessfully created a controller at \e[39m".realpath(dirname(__DIR__, 2). "/Http/Controllers/$name.php");
     } else echo "\e[31mFile already exists at \e[39m".realpath(dirname(__DIR__, 2). "/Http/Controllers/$name.php");
 
-  }
-
-  public function getUsage()
-  {
-    return "make:controller <name>";
-  }
-
-  public function getArgs()
-  {
-    return [
-      "name" => "The name of the Controller",
-    ];
   }
 
   private function controllerTemplate(): string
