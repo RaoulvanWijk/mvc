@@ -58,12 +58,12 @@ class Router
       // Check if the modified url matches the path of the current request
       if (preg_match('/^' . $url . '$/', $request->getUri()->getPath(), $matches)) {
 
-        // remove the first element of the array
-        // since that is the full matched string
-        array_shift($matches);
+          // remove the first element of the array
+          // since that is the full matched string
+          array_shift($matches);
 
-        // return the route with matches (parameters)
-        return [$route, $matches];
+          // return the route with matches (parameters)
+          return [$route, $matches];
       }
     }
     // if no route has been found return false
@@ -188,7 +188,7 @@ class Router
       $this->setAttribute(["middleware" => $params]);
     }
 
-    // if the called function is prefix
+    // if the called function is 'prefix'
     if($method === 'prefix') {
       // set the prefixes attribute to the $params
       $this->setAttribute(["prefix" => $params]);
