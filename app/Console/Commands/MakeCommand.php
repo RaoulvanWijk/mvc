@@ -2,12 +2,21 @@
 
 namespace App\Console\Commands;
 
-class MakeCommand
-{
-  public string $defaultName = "make:command";
-  public string $defaultDescription = "Create a new command";
+use App\Console\Commands\Command;
 
-  public function execute($name): void
+class MakeCommand extends Command
+{
+    protected string $defaultName = "make:command";
+    protected string $usage = "make:command [arguments] [options]";
+    protected array $arguments = [
+        "<name>" => "The name of the command"
+    ];
+    protected array $options = [
+        //
+    ];
+    protected string $defaultDescription = "Create a new command class";
+
+  public function execute($name)
   {
     $template =  $this->commandTemplate();
     $template = str_replace("{{ name }}", $name, $template);
@@ -19,11 +28,6 @@ class MakeCommand
     } else echo "\e[31mFile already exists at \e[39m".realpath(__DIR__. "/$name.php");
   }
 
-  public function getUsage(): string
-  {
-    return "make:command <name>";
-  }
-
   private function commandTemplate(): string
   {
     return '<?php
@@ -32,32 +36,25 @@ namespace App\Console\Commands;
 
 class {{ name }}
 {
-  public string $defaultName = "";
-  public string $defaultDescription = "";
+   protected string $usage = "";
+
+  protected array $options = [
+    //
+  ];
+
+  protected string $defaultName = "";
+
+  protected string $defaultDescription = "";
+
+  protected array $arguments = [
+    //
+  ];
 
   public function execute(): void
   {
     
   }
 
-  public function getUsage(): string
-  {
-    return "";
-  }
-
-  public function getArgs(): array
-  {
-    return [
-
-    ];
-  }
 }';
-  }
-
-  public function getArgs(): array
-  {
-    return [
-      "name" => "The name of the command",
-    ];
   }
 }
