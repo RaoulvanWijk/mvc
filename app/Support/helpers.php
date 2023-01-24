@@ -61,3 +61,36 @@ if(!function_exists("methods")) {
     return $methods;
   }
 }
+
+if(!function_exists("error")) {
+  /**
+   * This function will send any error to a log file
+   * And die with the error message
+   * @param $error
+   * @param $custom
+   * @return void
+   */
+  function error($error, $custom = null): void
+  {
+    if(!is_null($custom)) {
+      error_log($custom, 3, dirname(__DIR__, 2). '/storage/logs/app.log');
+    }
+    error_log($error->getMessage(), 3, dirname(__DIR__, 2). '/storage/logs/app.log');
+    dd($error);
+  }
+}
+
+if(!function_exists("message_log")) {
+  /**
+   * This function will send any error to a log file
+   * And die with the error message
+   * @param $error
+   * @param $custom
+   * @return void
+   */
+  function message_log($message): void
+  {
+    error_log($message, 3, dirname(__DIR__, 2). '/storage/logs/app.log');
+
+  }
+}
