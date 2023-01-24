@@ -1,6 +1,7 @@
 <?php
 namespace App;
 
+use App\Exceptions\Container\ContainerException;
 use App\Http\HttpKernel\Router;
 use App\Support\Container;
 use Exception;
@@ -73,6 +74,10 @@ class Application
    */
   public function get(string $id): mixed
   {
-    return static::$container->get($id);
+    try {
+      return static::$container->get($id);
+    } catch (ContainerException | Exception $exception) {
+      error($exception, "ERROR: Something went wrong when resolving the dependency's");
+    }
   }
 }

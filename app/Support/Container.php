@@ -24,8 +24,11 @@ class Container implements ContainerInterface
     if($this->has($id)) {
       return $this->bindings[$id]["concrete"]($this);
     }
-
-    return $this->resolve($id);
+    try {
+      return $this->resolve($id);
+    } catch (ContainerException | Exception $exception) {
+      error($exception, "ERROR: Something went wrong when resolving the dependency's from the class");
+    }
   }
 
   /**
