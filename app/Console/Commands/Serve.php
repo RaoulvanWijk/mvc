@@ -18,15 +18,16 @@ class Serve extends Command
 
   public function execute(): void
   {
-      $descriptorspec = array(
+    $descriptorspec = array(
           0 => array("pipe", "r"),
           1 => array("pipe", "w"),
           2 => array("pipe", "w"),
       );
-    echo "\e[32mStarting the webserver on:\e[39m http://".($inputOptions["--host"] ?? "localhost").":". ($inputOptions["--port"] ?? "8080")."\n";
+    echo "\e[32mStarting the webserver on:\e[39m http://" .($inputOptions["--host"] ?? "localhost").":". ($inputOptions["--port"] ?? "8080")."\n";
     echo "\e[33mPress Ctrl+C to stop the webserver.\e[39m\n";
+
     $proc = proc_open("php -S ". ($args["options"]["--host"] ?? "localhost"). ":".($args["options"]["--port"] ?? "8080"). " -t public 2>&1 &", $descriptorspec, $pipes);
-    if(in_array("--clear", $this->inputOptions)) {
+    if(array_key_exists("--clear", $this->inputOptions)) {
       $this->clear();
     }
     fgets($pipes[1]);
