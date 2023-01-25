@@ -16,14 +16,14 @@ class Database
 
   public function __construct(string $dbName = null)
   {
-    $this->dbHost = $_ENV["DB_HOST"];
-    $this->dbName = $_ENV["DB_NAME"];
-    $this->dbUser = $_ENV["DB_USER"];
-    $this->dbPass = $_ENV["DB_PASS"];
+    $this->dbHost = $_ENV["DB_HOST"] ?? 'localhost';
+    $this->dbName = $_ENV["DB_NAME"] ?? 'mvcframework';
+    $this->dbUser = $_ENV["DB_USER"] ?? 'root';
+    $this->dbPass = $_ENV["DB_PASS"] ?? '';
     if(!is_null($dbName)) {
       $this->dbName = $dbName;
     }
-    switch(strtolower($_ENV["DB_CONNECTION"])) {
+    switch(strtolower($_ENV["DB_CONNECTION"] ?? 'mysql')) {
       case "sqlserver":
         $this->ConnectionSqlServer();
         break;
@@ -76,10 +76,10 @@ class Database
   }
 
   //Execute the prepared statement
-  public function execute()
+  public function execute($values = null)
   {
     try {
-      return $this->statement->execute();
+      return $this->statement->execute($values);
     } catch(PDOException $e) {
       error($e, 'ERROR: Something went wrong when executing the sql query');
     }
