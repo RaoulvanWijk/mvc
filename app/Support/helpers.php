@@ -73,9 +73,9 @@ if(!function_exists("error")) {
   function error($error, $custom = null): void
   {
     if(!is_null($custom)) {
-      error_log($custom, 3, dirname(__DIR__, 2). '/storage/logs/app.log');
+      error_log($custom. "\n", 3, dirname(__DIR__, 2). '/storage/logs/app.log');
     }
-    error_log($error->getMessage(), 3, dirname(__DIR__, 2). '/storage/logs/app.log');
+    error_log($error->getMessage(). "\n", 3, dirname(__DIR__, 2). '/storage/logs/app.log');
     dd($error);
   }
 }
@@ -90,7 +90,7 @@ if(!function_exists("message_log")) {
    */
   function message_log($message): void
   {
-    error_log($message, 3, dirname(__DIR__, 2). '/storage/logs/app.log');
+    error_log($message. "\n", 3, dirname(__DIR__, 2). '/storage/logs/app.log');
 
   }
 }
