@@ -6,11 +6,15 @@ use Psr\Http\Message\UriInterface;
 
 class Uri implements UriInterface
 {
-  private string $scheme;
-  private string $host;
-  private string $path;
-  private string $query;
-  private string $fragment;
+  private string $scheme = '';
+
+  private string $userInfo = '';
+
+  private string $host = '';
+  private string $port = '';
+  private string $path = '';
+  private string $query = '';
+  private string $fragment = '';
 
   public function __construct(string $scheme, string $host, string $path, string $query, string $fragment)
   {
@@ -50,7 +54,7 @@ class Uri implements UriInterface
    */
   public function getHost(): string
   {
-    return $this->host;
+    return strtolower($this->host);
   }
 
   /**
@@ -58,7 +62,7 @@ class Uri implements UriInterface
    */
   public function getPort(): int|string|null
   {
-    return '';
+    return $this->port;
   }
 
   /**
@@ -90,8 +94,9 @@ class Uri implements UriInterface
    */
   public function withScheme($scheme): Uri
   {
-    $this->scheme = $scheme;
-    return clone $this;
+    $new = clone $this;
+    $new->scheme = $scheme;
+    return $new;
   }
 
   /**
@@ -107,8 +112,9 @@ class Uri implements UriInterface
    */
   public function withHost($host): Uri
   {
-    $this->host = $host;
-    return clone $this;
+    $new = clone $this;
+    $new->host = $host;
+    return $new;
   }
 
   /**
@@ -116,7 +122,9 @@ class Uri implements UriInterface
    */
   public function withPort($port): Uri
   {
-    return clone $this;
+    $new = clone $this;
+    $new->port = $port;
+    return $new;
   }
 
   /**
@@ -124,8 +132,9 @@ class Uri implements UriInterface
    */
   public function withPath($path): Uri
   {
-    $this->path = $path;
-    return clone $this;
+    $new = clone $this;
+    $new->path = $path;
+    return $new;
   }
 
   /**
@@ -133,8 +142,9 @@ class Uri implements UriInterface
    */
   public function withQuery($query): Uri
   {
-    $this->query = $query;
-    return clone $this;
+    $new = clone $this;
+    $new->query = $query;
+    return $new;
   }
 
   /**
@@ -142,8 +152,9 @@ class Uri implements UriInterface
    */
   public function withFragment($fragment): Uri
   {
-    $this->fragment = $fragment;
-    return clone $this;
+    $new = clone $this;
+    $new->fragment = $fragment;
+    return $new;
   }
 
   /**
