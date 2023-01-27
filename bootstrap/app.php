@@ -32,7 +32,7 @@ $app->singleton(
  * so that you don't have to look in the console for the exception message
  */
 set_exception_handler(function($exception) {
-  dd($exception);
+  error($exception);
 });
 
 /**
