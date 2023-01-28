@@ -10,6 +10,7 @@ class GlobalFunctionsTwig extends \Twig\Extension\AbstractExtension
   {
     return [
       new TwigFunction('method', [$this, 'method']),
+      new TwigFunction('session', [$this, 'session'])
     ];
   }
 
@@ -19,4 +20,8 @@ class GlobalFunctionsTwig extends \Twig\Extension\AbstractExtension
   }
 
 
+  public function session($key = null)
+  {
+    return $key ? app(Session::class)->get($key) : app(Session::class);
+  }
 }
