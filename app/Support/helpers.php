@@ -26,11 +26,14 @@ if(!function_exists("app")) {
    * This function will try and get the class from the container
    * @param $id
    * @return mixed|object|string|null
-   * @throws Exception
    */
   function app($id): mixed
   {
-    return \App\Application::$container->get($id);
+    try {
+      return \App\Application::$container->get($id);
+    } catch(Exception | \App\Exceptions\Container\ContainerException $exception) {
+      error($exception);
+    }
   }
 }
 
@@ -43,9 +46,8 @@ if(!function_exists("redirect")) {
    * @param int $status
    * @param array $headers
    * @return \App\Http\HttpKernel\Response
-   * @throws Exception
    */
-  function redirect(string $location, int $status, array $headers = []): \App\Http\HttpKernel\Response
+  function redirect(string $location, int $status = 302, array $headers = []): \App\Http\HttpKernel\Response
   {
     return app(\App\Http\HttpKernel\Redirector::class)->to($location, $status, $headers);
   }
@@ -59,6 +61,13 @@ if(!function_exists("methods")) {
       $methods[$method] = "<input type='hidden' name='_method' value='$method'>";
     }
     return $methods;
+  }
+}
+
+if(!function_exists("method")) {
+  function method($method): string
+  {
+      return "<input type='hidden' name='_method' value='$method'>";
   }
 }
 
