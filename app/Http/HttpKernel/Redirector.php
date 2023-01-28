@@ -4,11 +4,11 @@ namespace App\Http\HttpKernel;
 
 class Redirector
 {
-  private Response $response;
+  private RedirectResponse $response;
 
-  public function to($location, $status = 200, $headers = []): Response
+  public function to($location, $status = 302, $headers = []): Response
   {
-    $this->response = new Response();
+    $this->response = new RedirectResponse();
     $this->response = $this->response->withAddedHeader("Location", $location);
     $this->response = $this->response->withStatus($status);
     foreach ($headers as $header => $value) {
