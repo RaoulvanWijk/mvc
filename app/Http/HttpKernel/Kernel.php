@@ -4,6 +4,7 @@ namespace App\Http\HttpKernel;
 
 use App\Exceptions\Http\MiddlewareNotFound;
 use App\Http\Middleware\Middleware;
+use App\Http\Middleware\UseCsrf;
 use App\Http\Middleware\UseSession;
 use Exception;
 use Psr\Container\ContainerExceptionInterface;
@@ -25,7 +26,8 @@ class Kernel implements RequestHandlerInterface
    */
   private array $routeMiddleware = [
     "use.session" => UseSession::class,
-    "api" => Middleware::class
+    "api" => Middleware::class,
+    "use.csrf" => UseCsrf::class
   ];
 
   /**

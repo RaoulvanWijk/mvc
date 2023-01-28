@@ -95,7 +95,7 @@ class Router
 
     // Load all the routes from web.php
     // and its needed middleware to function properly
-    $this->middleware("use.session")
+    $this->middleware(['use.session', 'use.csrf'])
     ->group(function () {
       require_once dirname(__DIR__, 3) . '/routes/web.php';
     });
