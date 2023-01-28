@@ -21,6 +21,7 @@ $loader = new \Twig\Loader\FilesystemLoader('../resources/views');
 $twig = new \Twig\Environment($loader, [
     "cache" => false
 ]);
+$twig->addExtension(new \App\Support\GlobalFunctionsTwig());
 
 $app->singleton(
     'twig',
@@ -33,6 +34,10 @@ $app->singleton(
  */
 set_exception_handler(function($exception) {
   error($exception);
+});
+
+set_error_handler(function ($error) {
+  error($error);
 });
 
 /**
