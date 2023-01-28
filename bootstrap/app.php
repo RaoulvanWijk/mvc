@@ -33,12 +33,14 @@ $app->singleton(
  * so that you don't have to look in the console for the exception message
  */
 set_exception_handler(function($exception) {
+
   error($exception);
 });
 
-set_error_handler(function ($error) {
-  error($error);
-});
+//set_error_handler(function ($error) {
+//  dump('waar?');
+//  error($error);
+//});
 
 /**
  * Return the application instance
