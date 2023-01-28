@@ -17,11 +17,17 @@ class UseCsrf implements MiddlewareInterface
       if(!$session_token || !isset($body['_token']) || $session_token !== $body['_token']) {
         return new \App\Http\HttpKernel\Response(403, reasonPhrase: "Forbidden");
       }
+      $this->generateToken();
     } else {
-      $token = bin2hex(random_bytes(32));
-      app(Session::class)->put('_token', $token);
-      app('twig')->addGlobal('csrf', "<input name='_token' type='hidden' value=".$token.">");
+      $this->generateToken();
     }
     return $next($request);
+  }
+
+  private function generateToken()
+  {
+    $token = bin2hex(random_bytes(32));
+    app(Session::class)->put('_token', $token);
+    app('twig')->addGlobal('csrf', "<input name='_token' type='hidden' value=".$token.">");
   }
 }
