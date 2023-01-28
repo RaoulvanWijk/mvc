@@ -13,7 +13,7 @@ use Psr\Http\Server\RequestHandlerInterface;
 
 class Kernel implements RequestHandlerInterface
 {
-  private array $routeHandler =[];
+  private array $routeHandler = [];
     private array $middleware = [
       //
     ];
@@ -46,11 +46,11 @@ class Kernel implements RequestHandlerInterface
 
       // check if the returned callable is a Route class
       if(!$route[0]["callable"]->isClosure()) {
-
         $this->routeHandler = [[$route[0]["callable"]->getController(), $route[0]["callable"]->getMethod()], $route[1]];
         $response = $this->handleRoute($route[0], $request);
       } else {
-        $response = call_user_func_array($route[0]["callable"]->getAction(), $route[1]);
+        $this->routeHandler = [$route[0]["callable"]->getAction(), $route[1]];
+        $response = $this->handleRoute($route[0], $request);
       }
     } else {
       // if no route was found return 404 response
@@ -77,11 +77,10 @@ class Kernel implements RequestHandlerInterface
   {
     // attempts to get all the middleware classes that are registered in the $routeMiddleware array
     // if it is not found it will throw a MiddlewareNotFound exception
-    $middlewares = $this->getMiddlewares(array_merge($route["middleware"], $route["callable"]->getMiddlewares()));
+    $middlewares = $this->getMiddlewares($route["callable"]->getMiddlewares());
 
     // sets the idx to 0
     $idx = 0;
-
     // Creates an anonymous function that will run all the middleware
     // and at the end run the controller with method or Closure
 
@@ -127,7 +126,13 @@ class Kernel implements RequestHandlerInterface
    */
   private function callRouteHandler($request): Response
   {
-    $response = call_user_func_array([app($this->routeHandler[0][0]), $this->routeHandler[0][1]], $this->routeHandler[1]);
+    if(is_callable($this->routeHandler[0])) {
+      $response = call_user_func_array($this->routeHandler[0], $this->routeHandler[1]);
+    } else {
+      $response = call_user_func_array([app($this->routeHandler[0][0]), $this->routeHandler[0][1]], $this->routeHandler[1]);
+    }
+
+
     if(!$response instanceof Response) $response = new Response();
     return $response;
   }
