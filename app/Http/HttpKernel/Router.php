@@ -5,6 +5,10 @@ namespace App\Http\HttpKernel;
 use App\Support\Arr;
 use Closure;
 
+/**
+ * @method prefix($prefix)
+ * @method middleware($name)
+ */
 class Router
 {
 
@@ -35,6 +39,10 @@ class Router
    * @var array
    */
   private array $middleware = [];
+
+  private array $groups = [];
+
+  private array $groupContext = [];
 
   /**
    * This function will try and match all the routes
@@ -105,11 +113,13 @@ class Router
   {
     // instantiate a new route class with $action
     $route = new Route($action);
-
+    $route->middleware($this->getMiddleware());
+    $prefix = $this->getPrefix();
     // register the route to the $routes array
-    $this->routes[$method][$this->prefix .$url] = [
+    if(!empty($prefix) && $url === '/') $url = '';
+    $this->routes[$method][$prefix .$url] = [
       "callable" => $route,
-      "middleware" => Arr::array_flatten($this->middleware)
+      "middleware" => []
     ];
 
     // return the route class so that middleware can be added
@@ -131,38 +141,18 @@ class Router
    * So that you can add a prefix to them
    * and put middleware on all the routes in the callback
    * and nested groups
-   * @param Closure $callback
-   * @param array $attributes
-   * @return $this
+   * @param Closure|array $attributes
+   * @param Closure|null $callback
+   * @return RouteGroup
    */
-  public function group(Closure $callback, array $attributes = []): static
+  public function group(Closure | array $attributes, Closure $callback = null): RouteGroup
   {
     // Set the attributes given as the second parameter
-    $this->setAttribute($attributes);
-
-    // Execute the callback function
-    $callback();
-
-    // explode the prefix by / so that we can remove its last element
-    $array = explode('/', $this->prefix);
-
-    // Check if array count is <= 2
-    // so that we can set the prefix to an empty string
-    // since the first element will always be an empty string
-    // and array_pop will return the second element if the first element is an empty string
-    if(count($array) <= 2) $this->prefix = '';
-
-    // else remove the last element of the prefix
-    // and put the array of prefixes into a string
-    // and set the prefix to the outcome
-    else {
-      $array = array_pop($array);
-      array_pop($this->middleware);
-      $this->prefix = is_string($array) ? implode('/', ['/'.$array]) : implode('/', $array);
-    }
-
+//    $this->setAttribute($attributes);
+    $group = new RouteGroup();
+    $this->groups[] = $group->group($attributes, $callback);
     // return this
-    return $this;
+    return $group;
   }
 
   /**
@@ -178,24 +168,26 @@ class Router
    * if you call a function that does not exist this function will run
    * @param $method
    * @param $params
-   * @return $this
+   * @return RouteGroup|null
    */
   public function __call($method, $params)
   {
     // if the called function is "middleware"
     if($method === 'middleware') {
+      $var = (new RouteGroup())->middleware($params);
       // set the middleware attribute to the $params
-      $this->setAttribute(["middleware" => $params]);
+      $this->groups[] = $var;
     }
 
     // if the called function is 'prefix'
     if($method === 'prefix') {
       // set the prefixes attribute to the $params
-      $this->setAttribute(["prefix" => $params]);
+      $var = (new RouteGroup())->prefix(...$params);
+      $this->groups[] = $var;
     }
 
     // return $this
-    return $this;
+    return $var ?? null;
   }
 
   /**
@@ -221,5 +213,33 @@ class Router
       // set the outcome of the formatted string to the prefix property
       $this->prefix = $this->prefix . $attributes["prefix"][0];
     }
+  }
+
+  public function removeOldGroup()
+  {
+    array_pop($this->groupContext);
+  }
+
+  public function updateGroupContext($group)
+  {
+    $this->groupContext[] = $group;
+  }
+
+  private function getPrefix(): string
+  {
+    $prefix = '';
+    foreach ($this->groupContext as $group) {
+      $prefix .= $group->prefix;
+    }
+    return $prefix;
+  }
+
+  private function getMiddleware()
+  {
+    $middleware = [];
+    foreach ($this->groupContext as $group) {
+      $middleware = array_merge($middleware, $group->middleware);
+    }
+    return $middleware;
   }
 }

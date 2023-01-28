@@ -2,9 +2,11 @@
 
 namespace App\Http\HttpKernel;
 
+use App\Support\Arr;
 use Exception;
 use Closure;
 use http\Exception\RuntimeException;
+use Symfony\Component\VarDumper\Caster\ClassStub;
 
 
 /**
@@ -132,9 +134,9 @@ class Route
    * @param ...$middleware
    * @return $this
    */
-  public function middleware(...$middleware): Route
+  public function middleware(...$middleware): RouteGroup | Route
   {
-    $this->middlewares = array_merge($this->middlewares, $middleware);
+    $this->middlewares = Arr::array_flatten(array_merge($this->middlewares, $middleware));
     return $this;
   }
 
@@ -143,9 +145,14 @@ class Route
    * @param string $prefix
    * @return Router
    */
-  public static function prefix(string $prefix): Router
+  public static function prefix(string $prefix): RouteGroup
   {
     return app(Router::class)->prefix($prefix);
+  }
+
+  public static function group(Closure | string $attributes, Closure $callback = null)
+  {
+    return app(Router::class)->group($attributes, $callback);
   }
 
   /**
