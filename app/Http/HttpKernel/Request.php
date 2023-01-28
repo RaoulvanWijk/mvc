@@ -414,6 +414,7 @@ class Request implements ServerRequestInterface
       new Uri(
         $_SERVER['REQUEST_SCHEME'] ?? 'http',
         $_SERVER['SERVER_NAME'] ?? "localhost",
+          $_SERVER['SERVER_PORT'] ?? '',
           $parsedUrl["path"] ?? '/',
         $parsedUrl["query"] ?? '',
         $parsedUrl["fragment"] ?? ''

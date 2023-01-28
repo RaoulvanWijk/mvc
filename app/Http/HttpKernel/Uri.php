@@ -16,10 +16,11 @@ class Uri implements UriInterface
   private string $query = '';
   private string $fragment = '';
 
-  public function __construct(string $scheme, string $host, string $path, string $query, string $fragment)
+  public function __construct(string $scheme, string $host, string $port, string $path, string $query, string $fragment)
   {
     $this->scheme = $scheme;
     $this->host = $host;
+    $this->port = $port;
     $this->path = $path;
     $this->query = $query;
     $this->fragment = $fragment;
