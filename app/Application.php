@@ -31,6 +31,9 @@ class Application
    */
   public function boot(): void
   {
+    $dotenv = \Dotenv\Dotenv::createImmutable(dirname(__DIR__));
+    $dotenv->safeLoad();
+    $dotenv->required(['DB_HOST', 'DB_NAME', 'DB_USER', 'DB_PASS']);
     require_once dirname(__DIR__). "/configs/container.php";
     app(Router::class)->boot();
     $this->booted = true;
