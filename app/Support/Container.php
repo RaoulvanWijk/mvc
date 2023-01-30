@@ -2,6 +2,8 @@
 
 namespace App\Support;
 
+use App\Http\HttpKernel\Request;
+use App\Models\Model;
 use Exception;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\ContainerInterface;
@@ -9,6 +11,7 @@ use App\Exceptions\Container\NotFoundException;
 use App\Exceptions\Container\ContainerException;
 use Psr\Container\NotFoundExceptionInterface;
 use ReflectionException;
+use ReflectionFunction;
 
 class Container implements ContainerInterface
 {
@@ -153,5 +156,42 @@ class Container implements ContainerInterface
       $params
     );
     return $dependencies;
+  }
+
+  public function resolveMethod($method, $params = null, $request = null)
+  {
+    $newParams = $params;
+    if(is_callable($method)) {
+      $method = new ReflectionFunction($method);
+    } elseif (class_exists($method[0])) {
+      $method = new \ReflectionMethod($method[0], $method[1]);
+    }
+    $methodParams = $method->getParameters();
+    if (empty($params)) return [];
+    $idx = 0;
+    foreach ($methodParams as $param) {
+      $type = $param->getType();
+      if (!$type) {
+        $idx++;
+        continue;
+      }
+      if($type->isBuiltin() || $type instanceof \ReflectionUnionType) {
+        $idx++;
+        continue;
+      }
+      if($type->getName() === Request::class) {
+        array_splice($newParams, $idx, 0, [$request]);
+        $idx++;
+        continue;
+      }
+
+      if (is_subclass_of($type->getName(), Model::class)) {
+        $id = ($type->getName())::find($newParams[$idx]);
+        $newParams[$idx] = $id;
+        $idx++;
+        continue;
+      }
+    }
+    return $newParams;
   }
 }

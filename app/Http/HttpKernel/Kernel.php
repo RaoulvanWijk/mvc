@@ -2,6 +2,7 @@
 
 namespace App\Http\HttpKernel;
 
+use App\Application;
 use App\Exceptions\Http\MiddlewareNotFound;
 use App\Http\Middleware\Middleware;
 use App\Http\Middleware\UseCsrf;
@@ -130,10 +131,12 @@ class Kernel implements RequestHandlerInterface
    */
   private function callRouteHandler($request): Response
   {
+    $params = Application::$container->resolveMethod($this->routeHandler[0], $this->routeHandler[1], $request);
     if(is_callable($this->routeHandler[0])) {
-      $response = call_user_func_array($this->routeHandler[0], $this->routeHandler[1]);
+
+      $response = call_user_func_array($this->routeHandler[0], $params);
     } else {
-      $response = call_user_func_array([app($this->routeHandler[0][0]), $this->routeHandler[0][1]], $this->routeHandler[1]);
+      $response = call_user_func_array([app($this->routeHandler[0][0]), $this->routeHandler[0][1]], $params);
     }
 
 
