@@ -15,13 +15,13 @@ class GlobalFunctionsTwig extends \Twig\Extension\AbstractExtension
     ];
   }
 
-  public function method($name)
+  public function method($name): string
   {
     return method($name);
   }
 
 
-  public function session($key = null)
+  public function session($key = null): mixed
   {
     return $key ? app(Session::class)->get($key) : app(Session::class);
   }
