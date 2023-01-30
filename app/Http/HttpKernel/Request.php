@@ -66,7 +66,7 @@ class Request implements ServerRequestInterface
   /**
    * @var array
    */
-  private array $parsedBody;
+  private array|object $parsedBody;
 
   /**
    * Request constructor.
@@ -96,7 +96,7 @@ class Request implements ServerRequestInterface
     array $queryParams = [],
     array $uploadedFiles = [],
     array $attributes = [],
-    array $parsedBody = []
+    array|object $parsedBody = []
 ) {
     $this->requestTarget = $requestTarget;
     $this->method = $method;
@@ -111,6 +111,8 @@ class Request implements ServerRequestInterface
     $this->attributes = $attributes;
     $this->parsedBody = $parsedBody;
 }
+
+
 
   /**
    * @inheritDoc
@@ -427,8 +429,17 @@ class Request implements ServerRequestInterface
       $_GET,
       self::parseUploadedFiles($_FILES),
       $attributes,
-      $_POST
+      self::parseData()
     );
+  }
+
+  private static function parseData()
+  {
+    if($_SERVER["CONTENT_TYPE"] === 'application/json') {
+      return json_decode(json_decode(trim(file_get_contents("php://input")), true), true);
+    } else {
+      return $_POST;
+    }
   }
 
   private static function parseHeaders(array $server): array
