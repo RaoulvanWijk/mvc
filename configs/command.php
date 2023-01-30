@@ -7,4 +7,5 @@ return [
   new \App\Console\Commands\MakeCommand(),
   new \App\Console\Commands\CreateController(),
   new \App\Console\Commands\MakeMiddleware(),
+  new \App\Console\Commands\MakeModel(),
 ];
