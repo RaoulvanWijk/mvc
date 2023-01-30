@@ -34,10 +34,8 @@ class Kernel implements RequestHandlerInterface
    * This function will be used to handle the route
    * @param ServerRequestInterface $request
    * @return Response
-   * @throws ContainerExceptionInterface
-   * @throws MiddlewareNotFound
    * @throws NotFoundExceptionInterface
-   * @throws Exception
+
    */
   public function handle(ServerRequestInterface $request): Response
   {
@@ -49,7 +47,7 @@ class Kernel implements RequestHandlerInterface
       // check if the Route class has a closure or controller and method
       // and handle the route based on the outcome
       if(!$route[0]["callable"]->isClosure()) {
-        $this->routeHandler = [[$route[0]["callable"]->getController(), $route[0]["callable"]->getMethod()], $route[1]];
+        $this->routeHandler = [[$route[0]["callable"]->getCntroller(), $route[0]["callable"]->getMethod()], $route[1]];
         $response = $this->handleRoute($route[0], $request);
       } else {
         $this->routeHandler = [$route[0]["callable"]->getAction(), $route[1]];
@@ -74,13 +72,17 @@ class Kernel implements RequestHandlerInterface
    * @param array $route
    * @param $request
    * @return Response
-   * @throws MiddlewareNotFound
    */
   private function handleRoute(array $route, $request) : Response
   {
     // attempts to get all the middleware classes that are registered in the $routeMiddleware array
     // if it is not found it will throw a MiddlewareNotFound exception
-    $middlewares = $this->getMiddlewares($route["callable"]->getMiddlewares());
+    try {
+      $middlewares = $this->getMiddlewares($route["callable"]->getMiddlewares());
+    } catch (MiddlewareNotFound $exception) {
+      error($exception);
+    }
+
 
     // sets the idx to 0
     $idx = 0;
@@ -121,11 +123,10 @@ class Kernel implements RequestHandlerInterface
 
   /**
    * This function will call the routeHandler and return a response
-   * if no response was returned by the routehandler or middleware
+   * if no response was returned by the route-handler or middleware
    * it will create a new empty Response
    * @param $request
    * @return Response
-   * @throws Exception
    */
   private function callRouteHandler($request): Response
   {
