@@ -435,7 +435,7 @@ class Request implements ServerRequestInterface
 
   private static function parseData()
   {
-    if($_SERVER["CONTENT_TYPE"] === 'application/json') {
+    if($_SERVER["CONTENT_TYPE"] ?? '' === 'application/json') {
       return json_decode(json_decode(trim(file_get_contents("php://input")), true), true);
     } else {
       return $_POST;
