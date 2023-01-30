@@ -20,7 +20,7 @@ class Model
   /**
    * Var used to store all the columns that are allowed to be inserted
    */
-  protected static array $fillables = [];
+  protected static array $fillable = [];
 
   /**
    * Var used to store the query
@@ -91,7 +91,7 @@ class Model
       self::setTable();
     }
     foreach ($data as $key => $value) {
-      if (!in_array($key, static::$fillables)) {
+      if (!in_array($key, static::$fillable)) {
         die("The column {$key} is not mass assignable or does not exist");
       }
     }
@@ -127,7 +127,7 @@ class Model
   {
     foreach ($attributes as $key => $attribute)
     {
-      if(in_array($key, static::$fillables)) {
+      if(in_array($key, static::$fillable)) {
         $this->attributes[$key] = $attribute;
       } else {
         $this->hidden[$key] = $attribute;
