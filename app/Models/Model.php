@@ -49,6 +49,11 @@ class Model
     self::$databaseName = $dbName;
   }
 
+  public function __get(string $name)
+  {
+    return $this->attributes[$name];
+  }
+
   public static function select($columns = ['*']): QueryBuilder
   {
     if(!self::$databaseTable) {
