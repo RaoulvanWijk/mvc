@@ -37,6 +37,10 @@ class Model
    */
   protected Database $db;
 
+  private $attributes = [];
+
+  private $hidden = [];
+
   protected static ?string $databaseName = null;
 
   public function __construct(string $dbName = null)
@@ -58,8 +62,8 @@ class Model
     if(!self::$databaseTable) {
       self::setTable();
     }
-    return (new QueryBuilder(static::$databaseTable, static::$primaryKey, static::$databaseName))
-              ->find($id);
+    $res = (new QueryBuilder(static::$databaseTable, static::$primaryKey, static::$databaseName))->find($id);
+    return static::toModel($res);
   }
 
   public static function all(): array | bool
@@ -110,5 +114,24 @@ class Model
     $className = end($className);
     $className = preg_replace('/(?<!^)[A-Z]/', '_$0', $className);
     return strtolower($className) . 's';
+  }
+
+  public static function toModel($res)
+  {
+    $model = new Static();
+    $model->setAttributes($res);
+    return $model;
+  }
+
+  public function setAttributes($attributes)
+  {
+    foreach ($attributes as $key => $attribute)
+    {
+      if(in_array($key, static::$fillables)) {
+        $this->attributes[$key] = $attribute;
+      } else {
+        $this->hidden[$key] = $attribute;
+      }
+    }
   }
 }
