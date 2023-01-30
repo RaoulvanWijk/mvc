@@ -66,6 +66,11 @@ class Route
    */
   private Closure $action;
 
+  /**
+   * @var string Var used to store the name given to the route
+   */
+  private string $name = '';
+
   public function __construct($action)
   {
     // Check if the $action parameter is an array
@@ -130,9 +135,29 @@ class Route
   }
 
   /**
+   * This function can be used to give a name to a route
+   * @param string $name
+   * @return $this
+   */
+  public function name(string $name): static
+  {
+    $this->name = $name;
+    return $this;
+  }
+
+  /**
+   * This will return the name of the route
+   * @return string
+   */
+  public function getName(): string
+  {
+    return $this->name;
+  }
+
+  /**
    * This function will apply middleware to a route
    * @param ...$middleware
-   * @return $this
+   * @return RouteGroup|Route
    */
   public function middleware(...$middleware): RouteGroup | Route
   {

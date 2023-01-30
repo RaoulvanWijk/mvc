@@ -40,6 +40,8 @@ class Router
    */
   private array $middleware = [];
 
+  private array $namedRoutes = [];
+
   private array $groups = [];
 
   private array $groupContext = [];
@@ -162,6 +164,40 @@ class Router
   public function getRoutes(): array
   {
     return $this->routes;
+  }
+
+  public function getRouteByName(string $name, $params = null)
+  {
+    if(in_array($name, $this->namedRoutes)) return $this->parseUrl($this->namedRoutes[$name], $params);
+    foreach ($this->routes as $method => $routes) {
+//      dump($name, array_column($routes, 'callable'));
+      foreach($routes as $url => $route) {
+        if($name === $route["callable"]->getName()) {
+          $url = preg_replace('/\//', '\/', $url);
+          // Replace any route parameters (placeholders in curly braces)
+          // with a regular expression that will match an alphanumeric string
+
+          $url = preg_replace('/\{[a-zA-Z0-9]*\}|\(.*\)/', '{param}', $url);
+          $this->namedRoutes[$name] = $url;
+
+          return $this->parseUrl($url, $params, $name);
+        }
+      }
+    }
+  }
+
+  public function parseUrl($url, $params, $name)
+  {
+    $array = explode('\/', $url);
+    array_shift($array);
+    $url = array_map(function ($url) use ($params, $name) {
+      if($url === '{param}') {
+        if(!$params) return error("ERROR: The route [{$name}] Needs more parameters");
+        return array_shift($params);
+      }
+      return $url;
+    }, $array);
+    return implode('/', $url);
   }
 
   /**

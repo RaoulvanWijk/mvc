@@ -1,6 +1,6 @@
 <?php
 
-if(!function_exists("view")) {
+if (!function_exists("view")) {
   /**
    * This function will load a view
    * by putting it in the body of the stream
@@ -20,7 +20,7 @@ if(!function_exists("view")) {
     }
 }
 
-if(!function_exists("app")) {
+if (!function_exists("app")) {
   /**
    * This function will try and get the class from the container
    * @param $id
@@ -36,7 +36,7 @@ if(!function_exists("app")) {
   }
 }
 
-if(!function_exists("redirect")) {
+if (!function_exists("redirect")) {
   /**
    * This function will return a response
    * with an added header('Location')
@@ -52,7 +52,21 @@ if(!function_exists("redirect")) {
   }
 }
 
-if(!function_exists("methods")) {
+if (!function_exists("route")) {
+  /**
+   * This function will try to resolve the route by the given name,
+   * and after it has found the route it will replace the placeholders with the given parameters
+   * @param $name
+   * @param $params
+   * @return mixed
+   */
+  function route($name, $params = null) {
+    $router = app(\App\Http\HttpKernel\Router::class);
+    return $router->getRouteByName($name, $params);
+  }
+}
+
+if (!function_exists("methods")) {
   function methods(): array
   {
     $methods = [];
@@ -63,14 +77,14 @@ if(!function_exists("methods")) {
   }
 }
 
-if(!function_exists("method")) {
+if (!function_exists("method")) {
   function method($method): string
   {
       return "<input type='hidden' name='_method' value='$method'>";
   }
 }
 
-if(!function_exists("error")) {
+if (!function_exists("error")) {
   /**
    * This function will send any error to a log file
    * And die with the error message
@@ -88,7 +102,7 @@ if(!function_exists("error")) {
   }
 }
 
-if(!function_exists("message_log")) {
+if (!function_exists("message_log")) {
   /**
    * This function will send any error to a log file
    * And die with the error message
