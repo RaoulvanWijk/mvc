@@ -47,7 +47,7 @@ class Kernel implements RequestHandlerInterface
       // check if the Route class has a closure or controller and method
       // and handle the route based on the outcome
       if(!$route[0]["callable"]->isClosure()) {
-        $this->routeHandler = [[$route[0]["callable"]->getCntroller(), $route[0]["callable"]->getMethod()], $route[1]];
+        $this->routeHandler = [[$route[0]["callable"]->getController(), $route[0]["callable"]->getMethod()], $route[1]];
         $response = $this->handleRoute($route[0], $request);
       } else {
         $this->routeHandler = [$route[0]["callable"]->getAction(), $route[1]];
