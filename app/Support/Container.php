@@ -158,7 +158,7 @@ class Container implements ContainerInterface
     return $dependencies;
   }
 
-  public function resolveMethod($method, $params = null, $request = null)
+  public function resolveMethod($method, $params = [], $request = null)
   {
     $newParams = $params;
     if(is_callable($method)) {
@@ -167,7 +167,7 @@ class Container implements ContainerInterface
       $method = new \ReflectionMethod($method[0], $method[1]);
     }
     $methodParams = $method->getParameters();
-    if (empty($params)) return [];
+    if (empty($methodParams)) return [];
     $idx = 0;
     foreach ($methodParams as $param) {
       $type = $param->getType();
@@ -175,6 +175,7 @@ class Container implements ContainerInterface
         $idx++;
         continue;
       }
+
       if($type->isBuiltin() || $type instanceof \ReflectionUnionType) {
         $idx++;
         continue;
