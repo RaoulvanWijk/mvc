@@ -8,7 +8,6 @@ if(!function_exists("view")) {
    * @param $file
    * @param array $data
    * @return \App\Http\HttpKernel\Response
-   * @throws Exception
    */
     function view($file, array $data = []): \App\Http\HttpKernel\Response
     {

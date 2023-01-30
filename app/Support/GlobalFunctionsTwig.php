@@ -10,7 +10,8 @@ class GlobalFunctionsTwig extends \Twig\Extension\AbstractExtension
   {
     return [
       new TwigFunction('method', [$this, 'method']),
-      new TwigFunction('session', [$this, 'session'])
+      new TwigFunction('session', [$this, 'session']),
+      new TwigFunction('component', [$this, 'component'])
     ];
   }
 
@@ -23,5 +24,11 @@ class GlobalFunctionsTwig extends \Twig\Extension\AbstractExtension
   public function session($key = null)
   {
     return $key ? app(Session::class)->get($key) : app(Session::class);
+  }
+
+  public function component($name, $params = []): string
+  {
+    $id = uniqid();
+    return "<div id='".$id."'  data-component-type='".$name."' data-component-params='".json_encode($params)."'></div>";
   }
 }
