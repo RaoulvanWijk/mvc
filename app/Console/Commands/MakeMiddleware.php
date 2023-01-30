@@ -32,7 +32,8 @@ class MakeMiddleware extends Command
 
 namespace App\Http\Middleware;
 
-use App\Contracts\MiddlewareInterface;use Psr\Http\Message\ResponseInterface as Response;
+use App\Contracts\MiddlewareInterface;
+use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use App\Contracts\MiddlewareInterface;
 use Closure;

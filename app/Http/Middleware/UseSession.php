@@ -14,10 +14,8 @@ class UseSession implements MiddlewareInterface
   {
     $session = app(Session::class);
     $session->start();
-    $_SESSION["test"] = "test";
     $response = $next($request);
     $session->save();
-    $_SESSION["test"] = "TETET";
     return $response;
   }
 }
