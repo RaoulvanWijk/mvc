@@ -46,16 +46,4 @@ class {{ name }} implements MiddlewareInterface
   }
 }';
   }
-
-  public function getUsage(): string
-  {
-    return "make:middleware <name>";
-  }
-
-  public function getArgs(): array
-  {
-    return [
-      "name" => "Name of the middleware"
-    ];
-  }
 }
