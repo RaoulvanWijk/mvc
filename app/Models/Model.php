@@ -62,7 +62,32 @@ class Model
     return (new QueryBuilder(static::$databaseTable, static::$primaryKey, static::$databaseName))->select($columns);
   }
 
-  public static function find($id)
+  /**
+   * Add a part of a query to the query without query-builder
+   * @param $query
+   * @param $binds
+   * @return QueryBuilder
+   */
+  public function query($query, $binds): QueryBuilder
+  {
+    if(!self::$databaseTable) {
+      self::setTable();
+    }
+    return (new QueryBuilder(static::$databaseTable, static::$primaryKey, static::$databaseName))->query($query, $binds);
+  }
+
+  /**
+   * Execute a query without query-builder
+   * @param $query
+   * @param $binds
+   * @return mixed
+   */
+  public function exec($query, $binds): mixed
+  {
+    return (new QueryBuilder(static::$databaseTable, static::$primaryKey, static::$databaseName))->exec($query, $binds);
+  }
+
+  public static function find($id): static
   {
     if(!self::$databaseTable) {
       self::setTable();

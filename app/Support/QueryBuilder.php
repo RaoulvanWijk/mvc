@@ -339,15 +339,15 @@ class QueryBuilder
    * This method is used to execute a query without the models query builder
    * @param string $query
    * @param array $binds
-   * @return array
+   * @return QueryBuilder
    */
-  public function rawQuery(string $query, array $binds): array
+  public function query(string $query, array $binds): static
   {
     $this->db->query($query);
     foreach ($binds as $key => $value) {
       $this->db->bind($key, $value);
     }
-    return $this->db->resultSet();
+    return $this;
   }
 
   /**
@@ -356,7 +356,7 @@ class QueryBuilder
    * @param array $binds
    * @return mixed
    */
-  protected function exec(string $query, array $binds = []): mixed
+  public function exec(string $query, array $binds = []): mixed
   {
     $this->db->query($query);
     if (!empty($binds)) {
