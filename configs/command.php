@@ -8,4 +8,5 @@ return [
   new \App\Console\Commands\CreateController(),
   new \App\Console\Commands\MakeMiddleware(),
   new \App\Console\Commands\MakeModel(),
+  new \App\Console\Commands\MakeComponent(),
 ];

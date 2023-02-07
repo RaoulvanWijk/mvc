@@ -1,8 +1,6 @@
 <?php
 
-namespace App\Components;
-
-use App\Contracts\Components\ComponentInterface;
+namespace App\Http\Components;
 
 class Component
 {
