@@ -34,7 +34,7 @@ class MakeCommand extends Command
 
 namespace App\Console\Commands;
 
-class {{ name }}
+class {{ name }} extends Command
 {
    protected string $usage = "";
 
