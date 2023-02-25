@@ -158,6 +158,11 @@ class Container implements ContainerInterface
     return $dependencies;
   }
 
+  /**
+   * Resolve the parameters from the given method
+   * @throws ReflectionException
+   * @throws ContainerException
+   */
   public function resolveMethod($method, $params = [], $request = null)
   {
     $newParams = $params;
@@ -165,10 +170,14 @@ class Container implements ContainerInterface
       $method = new ReflectionFunction($method);
     } elseif (class_exists($method[0])) {
       $method = new \ReflectionMethod($method[0], $method[1]);
+    } else {
+      throw new ContainerException("The given callable of route is not a class or function");
     }
     $methodParams = $method->getParameters();
+
     if (empty($methodParams)) return [];
     $idx = 0;
+
     foreach ($methodParams as $param) {
       $type = $param->getType();
       if (!$type) {
@@ -180,6 +189,7 @@ class Container implements ContainerInterface
         $idx++;
         continue;
       }
+
       if($type->getName() === Request::class) {
         array_splice($newParams, $idx, 0, [$request]);
         $idx++;
@@ -192,6 +202,8 @@ class Container implements ContainerInterface
         $idx++;
         continue;
       }
+
+
     }
     return $newParams;
   }
