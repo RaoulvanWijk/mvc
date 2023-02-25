@@ -166,6 +166,10 @@ class Container implements ContainerInterface
   public function resolveMethod($method, $params = [], $request = null)
   {
     $newParams = $params;
+    /**
+     * Check if the method is a function or class and method
+     * if not throw exception
+     */
     if(is_callable($method)) {
       $method = new ReflectionFunction($method);
     } elseif (class_exists($method[0])) {
@@ -173,29 +177,52 @@ class Container implements ContainerInterface
     } else {
       throw new ContainerException("The given callable of route is not a class or function");
     }
+    /**
+     * Get the parameters from the method or function
+     */
     $methodParams = $method->getParameters();
 
+    /**
+     * If there are no parameters return empty array
+     */
     if (empty($methodParams)) return [];
+
+    // Initialize $idx var
     $idx = 0;
 
+    /**
+     * Loop over all the parameters
+     * to try and resolve the type
+     */
     foreach ($methodParams as $param) {
       $type = $param->getType();
+
+      // If no type move to next param
       if (!$type) {
         $idx++;
         continue;
       }
 
+      // If type is builtin or is UnionType move on
       if($type->isBuiltin() || $type instanceof \ReflectionUnionType) {
         $idx++;
         continue;
       }
 
+      /**
+       * If type is Request class put the current request at current idx
+       * and move the other vars in array to the right
+       */
       if($type->getName() === Request::class) {
         array_splice($newParams, $idx, 0, [$request]);
         $idx++;
         continue;
       }
 
+      /**
+       * If type is subclass of model
+       * find the row from the database
+       */
       if (is_subclass_of($type->getName(), Model::class)) {
         $id = ($type->getName())::find($newParams[$idx]);
         $newParams[$idx] = $id;
@@ -203,8 +230,19 @@ class Container implements ContainerInterface
         continue;
       }
 
+      /**
+       * If other if statements are false
+       * try to resolve the class from the container
+       * if it fails to resolve
+       * it throws exception
+       */
+      $newParams[$idx] = $this->resolve($type);
 
     }
+    /**
+     * return the newParams array to the router,
+     * so it can be parsed to the method
+     */
     return $newParams;
   }
 }
