@@ -30,6 +30,10 @@ class Session implements SessionInterface
     if(!empty($this->config->name)) session_name($this->config->name);
 
     if(!session_start()) throw new SessionException("Unable to start session");
+
+    if(!array_key_exists('_flash', $_SESSION) || !isset($_SESSION['_flash'])) {
+    $_SESSION['_flash'] = [];
+    }
   }
 
 
