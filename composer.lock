@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "147d0e0e18ec3298010d76653d0c904d",
+    "content-hash": "2f5e778aa208e6be134cb091d322448c",
     "packages": [
         {
             "name": "graham-campbell/result-type",
@@ -362,6 +362,53 @@
                 "source": "https://github.com/php-fig/http-server-middleware/tree/master"
             },
             "time": "2018-10-30T17:12:04+00:00"
+        },
+        {
+            "name": "raoul/php-validator",
+            "version": "V1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/RaoulvanWijk/Validator.git",
+                "reference": "deeed89b58d0f37f15f1238f6ff9105d9d79829b"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/RaoulvanWijk/Validator/zipball/deeed89b58d0f37f15f1238f6ff9105d9d79829b",
+                "reference": "deeed89b58d0f37f15f1238f6ff9105d9d79829b",
+                "shasum": ""
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Raoul\\Validator\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Raoul van Wijk",
+                    "email": "raoul.van.wijk05@gmail.com"
+                }
+            ],
+            "description": "A simple validator for PHP",
+            "keywords": [
+                "validation",
+                "validation library",
+                "validation library for PHP",
+                "validation package",
+                "validation package for PHP",
+                "validation tool",
+                "validation tool for PHP",
+                "validator"
+            ],
+            "support": {
+                "issues": "https://github.com/RaoulvanWijk/Validator/issues",
+                "source": "https://github.com/RaoulvanWijk/Validator/tree/V1.0.0"
+            },
+            "time": "2023-02-25T19:11:44+00:00"
         },
         {
             "name": "symfony/polyfill-ctype",
