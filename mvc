@@ -1,16 +1,7 @@
+#!/usr/bin/env php
 <?php
+require_once __DIR__ . '/vendor/autoload.php';
 
-use App\Console\ArgvInput;
+$cli = new \App\Console\CliRunner();
 
-// Require the autloader
-require_once __DIR__ . "../vendor/autoload.php";
-
-$dotenv = \Dotenv\Dotenv::createImmutable(__DIR__);
-$dotenv->load();
-//$dotenv->required(['DB_HOST', 'DB_NAME', 'DB_USER', 'DB_PASS']);
-
-// Get the command line arguments
-$ArgvInput = new ArgvInput($argv);
-
-// Handle the command line arguments
-$ArgvInput->handle();
+$cli->handle($argv);

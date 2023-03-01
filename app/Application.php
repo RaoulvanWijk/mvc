@@ -1,83 +1,86 @@
 <?php
-
 namespace App;
 
-use App\Helpers\Support\Session;
-use App\Http\HttpKernel;
-/**
- * This class will be used to handle the application
- */
+use App\Exceptions\Container\ContainerException;
+use App\Http\HttpKernel\Router;
+use App\Support\Container;
+use Exception;
+
 class Application
 {
-  // reference to the HttpKernel
-  public static HttpKernel $httpKernel;
+  /**
+   * Var used to store the container of the application
+   * @var Container
+   */
+  public static Container $container;
 
-  // reference to the Session
-  public static Session $session;
+  private bool $booted = false;
 
-  // This will be used to store the Requestclass that is needed
-  private object $currentRequestClass;
-  // This will be used to store method that is needed
-  private string $currentMethod;
-
-  private array $params;
-
-  // This method will be used to instantiate the HttpKernel class as singleton
+  /**
+   * Instantiate the Container for this application
+   */
   public function __construct()
   {
-      self::$httpKernel = new HttpKernel();
-      if(!isset(self::$session)) {
-        self::$session = new Session();
-      }
+    static::$container = new Container();
   }
 
   /**
-   * This method will be used to start the application
+   * Call all the boot methods of necessary classes
    * @return void
+   * @throws Exception
    */
-  public function start(): void
+  public function boot(): void
   {
-    $request = self::$httpKernel->handleRoute($_SERVER['REQUEST_URI'], self::getRequestMethod());
-    if(is_null($request)) exit();
-    $this->params = $request[1];
-    if(is_array($request[0])) {
-      $this->currentRequestClass = new $request[0][0]();
-      $this->currentMethod = $request[0][1];
-      self::validateRequest();
-      call_user_func_array([$this->currentRequestClass, $this->currentMethod], $this->params);
-    } else {
-      $request[0]($this->params);
-    }
+    $dotenv = \Dotenv\Dotenv::createImmutable(dirname(__DIR__));
+    $dotenv->safeLoad();
+    $dotenv->required(['DB_HOST', 'DB_NAME', 'DB_USER', 'DB_PASS']);
+    require_once dirname(__DIR__). "/configs/container.php";
+    app(Router::class)->boot();
+    $this->booted = true;
   }
 
   /**
-   * This method will return the request method that is being used by the user
-   * @return string
+   * This function will return weather or not the application has booted
+   * @return bool
    */
-  public function getRequestMethod(): string
+  public function isBooted(): bool
   {
-    if($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['_method'])) {
-      return $_POST['_method'];
-    } else {
-      return $_SERVER['REQUEST_METHOD'];
-    }
+    return $this->booted;
   }
 
   /**
-   * This method will be used to validate the request
-   * by checking if the method of the controller needs a request class
-   * @return void
+   * Register a new binding in the container
+   * @param string $id
+   * @param string|callable $concrete
+   * @return mixed
    */
-  public function validateRequest() : void
+  public static function make(string $id, string|callable $concrete): mixed
   {
-    $reflectionClass = new \ReflectionClass($this->currentRequestClass);
-    $reflectionMethod = $reflectionClass->getMethod($this->currentMethod);
-    if(count($reflectionMethod->getParameters()) > 0) {
-      // Check if the first parameter needs a request class
-      if(is_subclass_of($reflectionMethod->getParameters()[0]->getType()->getName(), 'App\Http\Requests\Request')) {
-        $requestClass = $reflectionMethod->getParameters()[0]->getType()->getName();
-        array_unshift($this->params, new $requestClass(array_merge($_GET, $_POST)));
-      }
+    return static::$container->bind($id, $concrete);
+  }
+
+  /**
+   * Register a new binding in the container as a singleton
+   * @param string $id
+   * @param string|callable|object $concrete
+   * @return mixed
+   */
+  public function singleton(string $id, string|callable|object $concrete): mixed
+  {
+    return static::$container->bind($id, $concrete, true);
+  }
+
+  /**
+   * Get the value of a binding from the container
+   * @param string $id
+   * @return mixed
+   */
+  public function get(string $id): mixed
+  {
+    try {
+      return static::$container->get($id);
+    } catch (ContainerException | Exception $exception) {
+      error($exception, "ERROR: Something went wrong when resolving the dependency's");
     }
   }
 }
