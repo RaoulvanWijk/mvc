@@ -142,14 +142,24 @@ class Kernel implements RequestHandlerInterface
 
     if(!$response instanceof Response) {
       if (is_string($response)) {
-        $stream = fopen("php://temp", 'w+');
-        fwrite($stream, $response);
-        rewind($stream);
-        $response = new Response(body: new Stream($stream));
+        $response = new Response(body: $this->createStreamFromString($response));
       } else {
         $response = new Response();
       }
     }
     return $response;
   }
+    /**
+     * Helper to create a Stream from a string.
+     *
+     * @param string $string
+     * @return Stream
+     */
+    private function createStreamFromString(string $string): Stream
+    {
+        $stream = fopen("php://temp", 'w+');
+        fwrite($stream, $string);
+        rewind($stream);
+        return new Stream($stream);
+    }
 }
