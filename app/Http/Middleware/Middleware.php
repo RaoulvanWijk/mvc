@@ -3,13 +3,13 @@
 namespace App\Http\Middleware;
 
 use App\Contracts\MiddlewareInterface;
-use Psr\Http\Message\ResponseInterface as Response;
-use Psr\Http\Message\ServerRequestInterface as Request;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
 use Closure;
 
 class Middleware implements MiddlewareInterface
 {
-  public function process(Request $request, Closure $next): Response
+  public function process(ServerRequestInterface $request, Closure $next): ResponseInterface
   {
     return $next($request);
   }
