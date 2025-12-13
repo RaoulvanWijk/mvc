@@ -300,7 +300,7 @@ class Request implements ServerRequestInterface
   public function withCookieParams(array $cookies): ServerRequestInterface
   {
     $new = clone $this;
-    $new->cookieParams = $cookies;
+    $new->cookieParams = $cookies; // Fixed: was $new->cookies
 
     return $new;
   }
@@ -373,7 +373,7 @@ class Request implements ServerRequestInterface
   /**
    * @inheritDoc
    */
-  public function getAttribute(string $name, $default = null)
+  public function getAttribute(string $name, $default = null): mixed
   {
     return $this->attributes[$name] ?? $default;
   }

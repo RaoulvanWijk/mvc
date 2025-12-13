@@ -212,7 +212,7 @@ class Stream implements \Psr\Http\Message\StreamInterface
   /**
    * @inheritDoc
    */
-  public function getMetadata(?string $key = null)
+  public function getMetadata(?string $key = null): mixed
   {
     if ($key === null) {
       return $this->metaData;

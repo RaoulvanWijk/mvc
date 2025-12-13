@@ -1,0 +1,1 @@
+{"version":2,"defects":{"Tests\\RouterTest::testAddRoute":7,"Tests\\RouterTest::testRouteParameters":7},"times":{"Tests\\RouterTest::testAddRoute":0.004,"Tests\\RouterTest::testRouteParameters":0,"Tests\\RouterTest::testRouteNotFound":0,"Tests\\RouterTest::testRouteMethodMismatch":0}}

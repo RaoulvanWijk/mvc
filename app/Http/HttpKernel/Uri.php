@@ -172,7 +172,11 @@ class Uri implements UriInterface
         $uri .= $this->getScheme() . ':';
     }
     if ($this->getAuthority() !== '' || $this->getHost() !== '') {
-        $uri .= '//' . $this->getHost();
+        $uri .= '//';
+        if ($this->getUserInfo() !== '') {
+            $uri .= $this->getUserInfo() . '@';
+        }
+        $uri .= $this->getHost();
         if ($this->getPort() !== null) {
             $uri .= ':' . $this->getPort();
         }
