@@ -300,7 +300,7 @@ class Request implements ServerRequestInterface
   public function withCookieParams(array $cookies): ServerRequestInterface
   {
     $new = clone $this;
-    $new->cookieParams = $cookies; // Fixed: was $new->cookies
+    $new->cookieParams = $cookies;
 
     return $new;
   }
