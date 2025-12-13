@@ -16,6 +16,12 @@ Install composer packages
 composer install
 ```
 
+## Running tests
+To run the test suite, execute the following command:
+```bash
+$ ./vendor/bin/phpunit
+```
+
 ## Running the framework
 To run the framework you have 2 options:
 Run it from command line
