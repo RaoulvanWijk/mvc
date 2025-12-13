@@ -144,6 +144,7 @@ class Kernel implements RequestHandlerInterface
       if (is_string($response)) {
         $stream = fopen("php://temp", 'w+');
         fwrite($stream, $response);
+        rewind($stream);
         $response = new Response(body: new Stream($stream));
       } else {
         $response = new Response();

@@ -137,7 +137,7 @@ class Request implements ServerRequestInterface
   /**
    * @inheritDoc
    */
-  public function withRequestTarget($requestTarget): Request
+  public function withRequestTarget(string $requestTarget): \Psr\Http\Message\RequestInterface
   {
     $new = clone $this;
     $new->requestTarget = $requestTarget;
@@ -155,7 +155,7 @@ class Request implements ServerRequestInterface
   /**
    * @inheritDoc
    */
-  public function withMethod($method): Request
+  public function withMethod(string $method): \Psr\Http\Message\RequestInterface
   {
     $new = clone $this;
     $new->method = $method;
@@ -173,7 +173,7 @@ class Request implements ServerRequestInterface
   /**
    * @inheritDoc
    */
-  public function withUri(UriInterface $uri, $preserveHost = false): Request
+  public function withUri(UriInterface $uri, bool $preserveHost = false): \Psr\Http\Message\RequestInterface
   {
     $new = clone $this;
     $new->uri = $uri;
@@ -191,7 +191,7 @@ class Request implements ServerRequestInterface
   /**
    * @inheritDoc
    */
-  public function withProtocolVersion($version): Request
+  public function withProtocolVersion(string $version): \Psr\Http\Message\MessageInterface
   {
     $new = clone $this;
     $new->protocolVersion = $version;
@@ -209,7 +209,7 @@ class Request implements ServerRequestInterface
   /**
    * @inheritDoc
    */
-  public function hasHeader($name): bool
+  public function hasHeader(string $name): bool
   {
     return array_key_exists($name, $this->headers);
   }
@@ -217,15 +217,15 @@ class Request implements ServerRequestInterface
   /**
    * @inheritDoc
    */
-  public function getHeader($name)
+  public function getHeader(string $name): array
   {
-    return $this->headers[$name] ?? null;
+    return $this->headers[$name] ?? [];
   }
 
   /**
    * @inheritDoc
    */
-  public function getHeaderLine($name): string
+  public function getHeaderLine(string $name): string
   {
     return implode(',', $this->getHeader($name));
   }
@@ -233,7 +233,7 @@ class Request implements ServerRequestInterface
   /**
    * @inheritDoc
    */
-  public function withHeader($name, $value): Request
+  public function withHeader(string $name, $value): \Psr\Http\Message\MessageInterface
   {
     $new = clone $this;
     $new->headers[$name] = $value;
@@ -243,7 +243,7 @@ class Request implements ServerRequestInterface
   /**
    * @inheritDoc
    */
-  public function withAddedHeader($name, $value): Request
+  public function withAddedHeader(string $name, $value): \Psr\Http\Message\MessageInterface
   {
     $new = clone $this;
     $new->headers[$name][] = $value;
@@ -253,7 +253,7 @@ class Request implements ServerRequestInterface
   /**
    * @inheritDoc
    */
-  public function withoutHeader($name): Request
+  public function withoutHeader(string $name): \Psr\Http\Message\MessageInterface
   {
     $new = clone $this;
     unset($new->headers[$name]);
@@ -263,7 +263,7 @@ class Request implements ServerRequestInterface
   /**
    * @inheritDoc
    */
-  public function getBody(): ?StreamInterface
+  public function getBody(): StreamInterface
   {
     return $this->body;
   }
@@ -271,7 +271,7 @@ class Request implements ServerRequestInterface
   /**
    * @inheritDoc
    */
-  public function withBody($body): Request
+  public function withBody(StreamInterface $body): \Psr\Http\Message\MessageInterface
   {
     $new = clone $this;
     $new->body = $body;
@@ -289,18 +289,18 @@ class Request implements ServerRequestInterface
   /**
    * @inheritDoc
    */
-  public function getCookieParams()
+  public function getCookieParams(): array
   {
-    return $this->cookies;
+    return $this->cookieParams;
   }
 
   /**
    * @inheritDoc
    */
-  public function withCookieParams(array $cookies): ServerRequestInterface|Request
+  public function withCookieParams(array $cookies): ServerRequestInterface
   {
     $new = clone $this;
-    $new->cookies = $cookies;
+    $new->cookieParams = $cookies; // Fixed: was $new->cookies
 
     return $new;
   }
@@ -316,7 +316,7 @@ class Request implements ServerRequestInterface
   /**
    * @inheritDoc
    */
-  public function withQueryParams(array $query): ServerRequestInterface|Request
+  public function withQueryParams(array $query): ServerRequestInterface
   {
     $new = clone $this;
     $new->queryParams = $query;
@@ -335,7 +335,7 @@ class Request implements ServerRequestInterface
   /**
    * @inheritDoc
    */
-  public function withUploadedFiles(array $uploadedFiles): ServerRequestInterface|Request
+  public function withUploadedFiles(array $uploadedFiles): ServerRequestInterface
   {
     $new = clone $this;
     $new->uploadedFiles = $uploadedFiles;
@@ -354,7 +354,7 @@ class Request implements ServerRequestInterface
   /**
    * @inheritDoc
    */
-  public function withParsedBody($data): ServerRequestInterface|Request
+  public function withParsedBody($data): ServerRequestInterface
   {
     $new = clone $this;
     $new->parsedBody = $data;
@@ -373,7 +373,7 @@ class Request implements ServerRequestInterface
   /**
    * @inheritDoc
    */
-  public function getAttribute($name, $default = null)
+  public function getAttribute(string $name, $default = null)
   {
     return $this->attributes[$name] ?? $default;
   }
@@ -381,7 +381,7 @@ class Request implements ServerRequestInterface
   /**
    * @inheritDoc
    */
-  public function withAttribute($name, $value): ServerRequestInterface|Request
+  public function withAttribute(string $name, $value): ServerRequestInterface
   {
     $new = clone $this;
     $new->attributes[$name] = $value;
@@ -392,7 +392,7 @@ class Request implements ServerRequestInterface
   /**
    * @inheritDoc
    */
-  public function withoutAttribute($name): ServerRequestInterface|Request
+  public function withoutAttribute(string $name): ServerRequestInterface
   {
     $new = clone $this;
     unset($new->attributes[$name]);
@@ -435,7 +435,7 @@ class Request implements ServerRequestInterface
 
   private static function parseData()
   {
-    if($_SERVER["CONTENT_TYPE"] ?? '' === 'application/json') {
+    if(($_SERVER["CONTENT_TYPE"] ?? '') === 'application/json') {
       return json_decode(json_decode(trim(file_get_contents("php://input")), true), true);
     } else {
       return $_POST;

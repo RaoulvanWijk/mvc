@@ -61,9 +61,9 @@ class Uri implements UriInterface
   /**
    * @inheritDoc
    */
-  public function getPort(): int|string|null
+  public function getPort(): ?int
   {
-    return $this->port;
+    return $this->port ? (int) $this->port : null;
   }
 
   /**
@@ -93,7 +93,7 @@ class Uri implements UriInterface
   /**
    * @inheritDoc
    */
-  public function withScheme($scheme): Uri
+  public function withScheme(string $scheme): UriInterface
   {
     $new = clone $this;
     $new->scheme = $scheme;
@@ -103,7 +103,7 @@ class Uri implements UriInterface
   /**
    * @inheritDoc
    */
-  public function withUserInfo($user, $password = null): Uri
+  public function withUserInfo(string $user, ?string $password = null): UriInterface
   {
     return clone $this;
   }
@@ -111,7 +111,7 @@ class Uri implements UriInterface
   /**
    * @inheritDoc
    */
-  public function withHost($host): Uri
+  public function withHost(string $host): UriInterface
   {
     $new = clone $this;
     $new->host = $host;
@@ -121,17 +121,21 @@ class Uri implements UriInterface
   /**
    * @inheritDoc
    */
-  public function withPort($port): Uri
+  public function withPort(?int $port): UriInterface
   {
     $new = clone $this;
-    $new->port = $port;
+    if ($port === null) {
+      $new->port = '';
+    } else {
+      $new->port = (string)$port;
+    }
     return $new;
   }
 
   /**
    * @inheritDoc
    */
-  public function withPath($path): Uri
+  public function withPath(string $path): UriInterface
   {
     $new = clone $this;
     $new->path = $path;
@@ -141,7 +145,7 @@ class Uri implements UriInterface
   /**
    * @inheritDoc
    */
-  public function withQuery($query): Uri
+  public function withQuery(string $query): UriInterface
   {
     $new = clone $this;
     $new->query = $query;
@@ -151,7 +155,7 @@ class Uri implements UriInterface
   /**
    * @inheritDoc
    */
-  public function withFragment($fragment): Uri
+  public function withFragment(string $fragment): UriInterface
   {
     $new = clone $this;
     $new->fragment = $fragment;
@@ -161,11 +165,34 @@ class Uri implements UriInterface
   /**
    * @inheritDoc
    */
-  public function __toString()
+  public function __toString(): string
   {
-    return $this->getScheme() . '://' . $this->getHost() . $this->getPath() . '?' . $this->getQuery() . '#' . $this->getFragment();
-  }
-}
-{
+    $uri = '';
+    if ($this->getScheme() !== '') {
+        $uri .= $this->getScheme() . ':';
+    }
+    if ($this->getAuthority() !== '' || $this->getHost() !== '') {
+        $uri .= '//' . $this->getHost();
+        if ($this->getPort() !== null) {
+            $uri .= ':' . $this->getPort();
+        }
+    }
+    $path = $this->getPath();
+    if ($path !== '') {
+        if ($path[0] !== '/') {
+            if ($this->getAuthority() !== '' || $this->getHost() !== '') {
+                $path = '/' . $path;
+            }
+        }
+    }
+    $uri .= $path;
+    if ($this->getQuery() !== '') {
+        $uri .= '?' . $this->getQuery();
+    }
+    if ($this->getFragment() !== '') {
+        $uri .= '#' . $this->getFragment();
+    }
 
+    return $uri;
+  }
 }

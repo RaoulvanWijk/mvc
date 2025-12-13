@@ -30,7 +30,7 @@ class Stream implements \Psr\Http\Message\StreamInterface
   /**
    * @inheritDoc
    */
-  public function __toString()
+  public function __toString(): string
   {
     if (!$this->isReadable()) {
       return '';
@@ -47,7 +47,7 @@ class Stream implements \Psr\Http\Message\StreamInterface
   /**
    * @inheritDoc
    */
-  public function close()
+  public function close(): void
   {
     if (is_resource($this->resource)) {
       fclose($this->resource);
@@ -70,7 +70,7 @@ class Stream implements \Psr\Http\Message\StreamInterface
   /**
    * @inheritDoc
    */
-  public function getSize()
+  public function getSize(): ?int
   {
     return $this->metaData['size'] ?? null;
   }
@@ -103,7 +103,7 @@ class Stream implements \Psr\Http\Message\StreamInterface
   /**
    * @inheritDoc
    */
-  public function isSeekable()
+  public function isSeekable(): bool
   {
     return $this->metaData['seekable'] ?? false;
   }
@@ -111,7 +111,7 @@ class Stream implements \Psr\Http\Message\StreamInterface
   /**
    * @inheritDoc
    */
-  public function seek($offset, $whence = SEEK_SET)
+  public function seek(int $offset, int $whence = SEEK_SET): void
   {
     if (!$this->resource) {
       throw new \RuntimeException('No resource available; cannot seek position');
@@ -129,7 +129,7 @@ class Stream implements \Psr\Http\Message\StreamInterface
   /**
    * @inheritDoc
    */
-  public function rewind()
+  public function rewind(): void
   {
     $this->seek(0);
   }
@@ -145,7 +145,7 @@ class Stream implements \Psr\Http\Message\StreamInterface
   /**
    * @inheritDoc
    */
-  public function write($string): int
+  public function write(string $string): int
   {
     if (!$this->resource) {
       throw new \RuntimeException('No resource available; cannot write');
@@ -174,7 +174,7 @@ class Stream implements \Psr\Http\Message\StreamInterface
   /**
    * @inheritDoc
    */
-  public function read($length): string
+  public function read(int $length): string
   {
     if (!$this->resource) {
       throw new \RuntimeException('No resource available; cannot read');
@@ -212,7 +212,7 @@ class Stream implements \Psr\Http\Message\StreamInterface
   /**
    * @inheritDoc
    */
-  public function getMetadata($key = null)
+  public function getMetadata(?string $key = null)
   {
     if ($key === null) {
       return $this->metaData;

@@ -44,7 +44,7 @@ class Response implements \Psr\Http\Message\ResponseInterface
   /**
    * @inheritDoc
    */
-  public function withProtocolVersion($version): Response
+  public function withProtocolVersion(string $version): \Psr\Http\Message\MessageInterface
   {
     $new = clone $this;
     $new->protocol = $version;
@@ -62,7 +62,7 @@ class Response implements \Psr\Http\Message\ResponseInterface
   /**
    * @inheritDoc
    */
-  public function hasHeader($name): bool
+  public function hasHeader(string $name): bool
   {
     return isset($this->headers[$name]);
   }
@@ -70,7 +70,7 @@ class Response implements \Psr\Http\Message\ResponseInterface
   /**
    * @inheritDoc
    */
-  public function getHeader($name)
+  public function getHeader(string $name): array
   {
     return isset($this->headers[$name]) ? $this->headers[$name] : [];
   }
@@ -78,7 +78,7 @@ class Response implements \Psr\Http\Message\ResponseInterface
   /**
    * @inheritDoc
    */
-  public function getHeaderLine($name): string
+  public function getHeaderLine(string $name): string
   {
     return implode(', ', $this->getHeader($name));
   }
@@ -86,7 +86,7 @@ class Response implements \Psr\Http\Message\ResponseInterface
   /**
    * @inheritDoc
    */
-  public function withHeader($name, $value): Response
+  public function withHeader(string $name, $value): \Psr\Http\Message\MessageInterface
   {
     $new = clone $this;
     $new->headers[$name] = (array) $value;
@@ -96,7 +96,7 @@ class Response implements \Psr\Http\Message\ResponseInterface
   /**
    * @inheritDoc
    */
-  public function withAddedHeader($name, $value): Response
+  public function withAddedHeader(string $name, $value): \Psr\Http\Message\MessageInterface
   {
     $new = clone $this;
     if (isset($new->headers[$name])) {
@@ -110,7 +110,7 @@ class Response implements \Psr\Http\Message\ResponseInterface
   /**
    * @inheritDoc
    */
-  public function withoutHeader($name): Response
+  public function withoutHeader(string $name): \Psr\Http\Message\MessageInterface
   {
     $new = clone $this;
     unset($new->headers[$name]);
@@ -120,7 +120,7 @@ class Response implements \Psr\Http\Message\ResponseInterface
   /**
    * @inheritDoc
    */
-  public function getBody(): ?StreamInterface
+  public function getBody(): StreamInterface
   {
     return $this->body;
   }
@@ -128,7 +128,7 @@ class Response implements \Psr\Http\Message\ResponseInterface
   /**
    * @inheritDoc
    */
-  public function withBody(StreamInterface $body): Response
+  public function withBody(StreamInterface $body): \Psr\Http\Message\MessageInterface
   {
     $new = clone $this;
     $new->body = $body;
@@ -146,7 +146,7 @@ class Response implements \Psr\Http\Message\ResponseInterface
   /**
    * @inheritDoc
    */
-  public function withStatus($code, $reasonPhrase = ''): Response
+  public function withStatus(int $code, string $reasonPhrase = ''): \Psr\Http\Message\ResponseInterface
   {
     $new = clone $this;
     $new->statusCode = $code;
@@ -157,7 +157,7 @@ class Response implements \Psr\Http\Message\ResponseInterface
   /**
    * @inheritDoc
    */
-  public function getReasonPhrase(): ?string
+  public function getReasonPhrase(): string
   {
     return $this->reasonPhrase;
   }
